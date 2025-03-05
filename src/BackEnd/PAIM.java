@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package paim;
+package BackEnd;
 
 
+import FrontEnd.DebugWindowsScreen;
+import FrontEnd.ScreenManager;
+import FrontEnd.LoginView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

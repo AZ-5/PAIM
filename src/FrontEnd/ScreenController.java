@@ -1,8 +1,6 @@
-package paim;
+package FrontEnd;
 
 //Imports
-
-//Begin Subclass ScreenController
 public class ScreenController {
         protected ScreenManager screenManager;
 

@@ -1,4 +1,4 @@
-package paim;
+package FrontEnd;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import javafx.scene.layout.Region;
+import BackEnd.DatabaseConnection;
 
 
 

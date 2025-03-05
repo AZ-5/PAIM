@@ -1,4 +1,4 @@
-package paim;
+package FrontEnd;
 
 /** 
  * @Course: SDEV 250 ~ Java Programming I
@@ -8,6 +8,7 @@ package paim;
  * @Subclass DebugWindowsScreen Description: 
  */
 //Imports
+import FrontEnd.ScreenController;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
