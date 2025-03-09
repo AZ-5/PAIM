@@ -1,12 +1,6 @@
 package FrontEnd;
 
-/** 
- * @Course: SDEV 250 ~ Java Programming I
- * @Author Name: Jonathan Cotterman
- * @Assignment Name: paim
- * @Date: Mar 2, 2025
- * @Subclass DebugWindowsScreen Description: 
- */
+
 //Imports
 import FrontEnd.ScreenController;
 import javafx.scene.layout.BorderPane;
@@ -56,6 +50,9 @@ public class DebugWindowsScreen extends ScreenController {
         borderPane.setRight(rightSpacer);
         
         loginButton.setOnAction(event -> switchTo("login"));
+        purchasingButton.setOnAction(event -> switchTo("purchasing"));
+        adminButton.setOnAction(event -> switchTo("admin"));
+        createAccountButton.setOnAction(even -> switchTo("create"));
     }
     
     public BorderPane getView(){

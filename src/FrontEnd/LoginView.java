@@ -46,13 +46,15 @@ public class LoginView extends ScreenController {
 
         // Create login button
         Button loginButton = new Button("Log In");
+        Button createAccButton = new Button("Create Account");
 
         // Set width for the text fields and password field
         usernameField.setPrefWidth(200);  
         passwordField.setPrefWidth(200);  
 
         // Add components to the VBox
-        vbox.getChildren().addAll(usernameField, passwordField, loginButton);
+        vbox.getChildren().addAll(usernameField, passwordField, loginButton,
+                createAccButton);
 
         // Add the VBox to the center of the BorderPane
         borderPane.setCenter(vbox);
@@ -83,6 +85,8 @@ public class LoginView extends ScreenController {
                 }
 
         });
+        
+        createAccButton.setOnAction(event -> switchTo("create"));
     }
 
     // Getter for the BorderPane

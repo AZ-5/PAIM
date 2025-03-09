@@ -1,12 +1,5 @@
 package FrontEnd;
 
-/** 
- * @Course: SDEV 250 ~ Java Programming I
- * @Author Name: Jonathan Cotterman
- * @Assignment Name: paim
- * @Date: Mar 2, 2025
- * @Subclass ScreenManager Description: 
- */
 //Imports
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
