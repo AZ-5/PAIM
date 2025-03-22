@@ -4,11 +4,16 @@ import BackEnd.DatabaseConnection;
 import BackEnd.Validation;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -87,6 +92,8 @@ public class CreateAccount extends ScreenController{
         borderPane.setCenter(gridPane);
         borderPane.setBottom(hBox1);
         
+        
+        // NEED TO ADD ERROR HANDLING FOR CREATE ACCOUNT
         createAccountButton.setOnAction(event -> {
             //Need to check if USername exists
             String userName = userNameText.getText();
@@ -120,6 +127,8 @@ public class CreateAccount extends ScreenController{
             
         });
     }
+    
+
         // Getter for the BorderPane
     public BorderPane getView() {
         return borderPane;

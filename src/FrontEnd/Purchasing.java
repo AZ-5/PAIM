@@ -2,6 +2,7 @@ package FrontEnd;
 
 
 //Imports
+import BackEnd.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
@@ -17,8 +18,17 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import BackEnd.Purchase;
+import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import javafx.scene.control.TableColumn;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 //Begin Subclass Purchasing
 public class Purchasing extends ScreenController {
@@ -32,6 +42,7 @@ public class Purchasing extends ScreenController {
     private VBox vBox2;
     private HBox hBox1;
     private HBox hBox2;
+    private HBox hBox3;
     private TableView<Purchase> tableView;
     
     
@@ -46,13 +57,16 @@ public class Purchasing extends ScreenController {
         vBox2 = new VBox();
         hBox1 = new HBox();
         hBox2 = new HBox();
+        hBox3 = new HBox();
         tableView = new TableView<>();
         
         //Combo Box options
         ObservableList<String> options = FXCollections.observableArrayList(
             "Widget",
             "Fidget",
-            "Toy");
+            "Gadget",
+            "Module",
+            "Tool");
         
         //Set vBox for TabPan1
         vBox.setAlignment(Pos.CENTER);
@@ -87,7 +101,7 @@ public class Purchasing extends ScreenController {
         TextField cityText = new TextField();
         Label lblCity = new Label("City");
         TextField zipText = new TextField();
-        Label lblZip = new Label("City");
+        Label lblZip = new Label("Zip");
         TextField stateText = new TextField();
         Label lblState = new Label("State");
         TextField countryText = new TextField();
@@ -140,17 +154,45 @@ public class Purchasing extends ScreenController {
         // Add Columns to TableView
         tableView.getColumns().addAll(orderIdColumn, customerNameColumn, 
                 partNameColumn, quantityColumn, dateColumn);
+        
+        //Tableview Hbox
+        Button getOpenOrders = new Button("Open Orders");
+        hBox3.getChildren().addAll(getOpenOrders);
 
-        // Add Some Dummy Data
-        ObservableList<Purchase> purchases = FXCollections.observableArrayList(
-                new Purchase(1, "John Doe", "Widget", 5, LocalDate.now()),
-                new Purchase(2, "Alice Smith", "Fidget", 10, LocalDate.now()),
-                new Purchase(3, "Robert Green", "Toy", 15, LocalDate.now())
-        );
-        tableView.setItems(purchases);
+
+      getOpenOrders.setOnAction(e -> {
+            ObservableList<Purchase> purchases = FXCollections.observableArrayList();
+            String sql = "SELECT p.purchase_id, cus.customer_name, lp.part_name, " 
+                    + "p.quantity, p.purchase_date " 
+                    + "FROM dbo.Purchasing AS p " 
+                    + "JOIN dbo.Customer AS cus ON p.customer_id = cus.customer_id " 
+                    + "JOIN dbo.LUPartName AS lp ON p.part_number = lp.part_number;";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int purchaseId = rs.getInt("purchase_id");
+                    String customerName = rs.getString("customer_name");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    LocalDate purchaseDate = rs.getDate("purchase_date").toLocalDate();
+
+                    Purchase purchase = new Purchase(purchaseId, customerName, partName, quantity, purchaseDate);
+                    purchases.add(purchase);
+                    tableView.setItems(purchases);
+                }
+            } catch (SQLException event) {
+                event.printStackTrace();
+            }
+        });
+      
+     // tableView.setItems(purchases);
 
         // Set BorderPane for Tab 3
         borderPaneTable.setCenter(tableView);
+        borderPaneTable.setBottom(hBox3);
         
         //Set tabs for tabPane
         Tab tab = new Tab();
@@ -178,6 +220,66 @@ public class Purchasing extends ScreenController {
         tabPane.getTabs().addAll(tab, tab2, tab3);
         
         borderPane.setCenter(tabPane);
+        
+        submitCustomerButton.setOnAction(e -> {
+            String name = customerNameText.getText();
+            String phoneNumber = phoneNumberText.getText();
+            String streetAddress = streetText.getText();
+            String city = cityText.getText();
+            String state = stateText.getText();
+            String zipCode = zipText.getText();
+            String country = countryText.getText();
+            
+            try(Connection conn = DatabaseConnection.getConnection())
+                {
+                    CallableStatement stmt = conn.prepareCall("{call "
+                            + "InsertCustomer(?, ?, ?, ?, ?, ?, ?)}");
+                    stmt.setString(1, name);  // Set input username
+                    stmt.setString(2, phoneNumber);  // Set input password
+                    stmt.setString(3, streetAddress);
+                    stmt.setString(4, city);
+                    stmt.setString(5, state);
+                    stmt.setString(6, country);
+                    stmt.setString(7, zipCode);
+
+                    // Execute the stored procedure
+                    stmt.execute();
+
+
+                } catch (SQLException event) {
+                    event.printStackTrace();
+                }
+        });
+        
+        submitPurchase.setOnAction(e -> {
+            //Add error handling in case the value isn't an int
+            int quantity = Integer.parseInt(quanityText.getText());
+            String customer = customerText.getText();
+            LocalDate date = PurchaseDate.getValue();
+            String part = partPicker.getValue().toString();
+            System.out.println(date);
+            int user = 1;
+            
+            try(Connection conn = DatabaseConnection.getConnection())
+                {
+                    CallableStatement stmt = conn.prepareCall("{call InsertPurchase("
+                            + "?, ?, ?, ?, ?)}");
+                    stmt.setInt(1, user);
+                    stmt.setInt(2, quantity);  // Set input username
+                    stmt.setDate(3, java.sql.Date.valueOf(date));  // Set input password
+                    stmt.setString(4, part);
+                    stmt.setString(5, customer);
+
+
+                    // Execute the stored procedure
+                    stmt.execute();
+
+
+                } catch (SQLException event) {
+                    event.printStackTrace();
+                }
+                
+        });
         
         
 }

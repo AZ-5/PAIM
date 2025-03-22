@@ -23,7 +23,7 @@ public class ScreenManager {
     public void showScreen(String name) {
         Pane screen = screenMap.get(name);
         if (screen != null) {
-            stage.setScene(new Scene(screen, 600, 400));
+            stage.setScene(new Scene(screen, 800, 600));
             stage.show();
         } else {
             System.err.println("Screen not found: " + name);
