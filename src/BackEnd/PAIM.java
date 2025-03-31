@@ -13,6 +13,7 @@ import FrontEnd.Purchasing;
 import FrontEnd.AdminScreen;
 import FrontEnd.CreateAccount;
 import FrontEnd.WorkorderScreen;
+import FrontEnd.InventoryScreen;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -30,6 +31,7 @@ public class PAIM extends Application {
         AdminScreen adminScreen = new AdminScreen();
         CreateAccount createAccScreen = new CreateAccount();
         WorkorderScreen workorderScreen = new WorkorderScreen();
+        InventoryScreen inventoryScreen = new InventoryScreen();
         
         //Place screens for screenManager here
         loginView.setScreenManager(screenManager);
@@ -38,6 +40,7 @@ public class PAIM extends Application {
         adminScreen.setScreenManager(screenManager);
         createAccScreen.setScreenManager(screenManager);
         workorderScreen.setScreenManager(screenManager);
+        inventoryScreen.setScreenManager(screenManager);
 
         // add screens to the manager
         screenManager.addScreen("login", loginView.getView());
@@ -46,6 +49,7 @@ public class PAIM extends Application {
         screenManager.addScreen("admin", adminScreen.getView());
         screenManager.addScreen("create", createAccScreen.getView());
         screenManager.addScreen("workorder", workorderScreen.getView());
+        screenManager.addScreen("inventory", inventoryScreen.getView());
         
         //Show the login screen
         //screenManager.showScreen("login");

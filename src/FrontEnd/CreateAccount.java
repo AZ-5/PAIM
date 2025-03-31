@@ -1,5 +1,5 @@
 package FrontEnd;
-
+//Imports
 import BackEnd.DatabaseConnection;
 import BackEnd.Validation;
 import java.sql.CallableStatement;
@@ -21,7 +21,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 
-//Imports
+//NOTES TO SELF. Need to validate all entries.
+// Then needs confirmation screen
 
 //Begin Subclass CreateAccount
 public class CreateAccount extends ScreenController{

@@ -52,8 +52,9 @@ public class DebugWindowsScreen extends ScreenController {
         loginButton.setOnAction(event -> switchTo("login"));
         purchasingButton.setOnAction(event -> switchTo("purchasing"));
         adminButton.setOnAction(event -> switchTo("admin"));
-        createAccountButton.setOnAction(even -> switchTo("create"));
+        createAccountButton.setOnAction(event -> switchTo("create"));
         workorderButton.setOnAction(event -> switchTo("workorder"));
+        inventoryButton.setOnAction(event -> switchTo("inventory"));
     }
     
     public BorderPane getView(){
