@@ -3,22 +3,28 @@ package FrontEnd;
 
 //Imports
 import FrontEnd.ScreenController;
+import java.util.function.Supplier;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
 //Begin Subclass DebugWindowsScreen
 public class DebugWindowsScreen extends ScreenController {
     
-    private BorderPane borderPane;
+    public Supplier<Pane> getView(){
+        return this::buildDebugView;
+    }
+    //private BorderPane borderPane;
     
-    public DebugWindowsScreen(){
+    private BorderPane buildDebugView(){
+    //public DebugWindowsScreen(){
         
-        borderPane = new BorderPane();
+        BorderPane borderPane = new BorderPane();
         
         // User Region to create blank space on left
         Region leftSpacer = new Region();
@@ -55,10 +61,12 @@ public class DebugWindowsScreen extends ScreenController {
         createAccountButton.setOnAction(event -> switchTo("create"));
         workorderButton.setOnAction(event -> switchTo("workorder"));
         inventoryButton.setOnAction(event -> switchTo("inventory"));
+        
+        return borderPane;
     }
-    
+    /*
     public BorderPane getView(){
         return borderPane;
     }
-
+*/
 } //End Subclass DebugWindowsScreen

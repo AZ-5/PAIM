@@ -12,35 +12,51 @@ import java.sql.SQLException;
 import java.sql.Types;
 import javafx.scene.layout.Region;
 import BackEnd.DatabaseConnection;
+import BackEnd.InventoryTable;
+import BackEnd.Warnings;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.function.Supplier;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 
 
 
 public class LoginView extends ScreenController {
 
-    private BorderPane borderPane;
-
-    public LoginView() {
+    public Supplier<Pane> getView() {
+        return this::buildLoginView;
+        //return borderPane;
+    }
+   // private BorderPane borderPane;
+    
+    private BorderPane buildLoginView(){
+   // public LoginView() {
         // Initialize the view components
-        borderPane = new BorderPane();
+        BorderPane borderPane = new BorderPane();
         
         // User Region to create blank space on left
         Region leftSpacer = new Region();
-        leftSpacer.setPrefWidth(100); 
+        leftSpacer.setPrefWidth(300); 
         
 
         // User Region to set space on right
         Region rightSpacer = new Region();
-        rightSpacer.setPrefWidth(100); 
+        rightSpacer.setPrefWidth(300); 
 
         // Create a VBox to stack the text and buttons vertically
         VBox vbox = new VBox(10);  
         vbox.setAlignment(Pos.CENTER);  
 
         // Create text field for username
+        Label txtTitle = new Label("Welcome");
+        Label txtUsername = new Label("Username");
         TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
+        usernameField.setPromptText("Username:");
 
         // Create password field
+        Label txtPassword = new Label("Password:");
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
 
@@ -49,12 +65,12 @@ public class LoginView extends ScreenController {
         Button createAccButton = new Button("Create Account");
 
         // Set width for the text fields and password field
-        usernameField.setPrefWidth(200);  
-        passwordField.setPrefWidth(200);  
+        usernameField.setPrefWidth(100);  
+        passwordField.setPrefWidth(100);  
 
         // Add components to the VBox
-        vbox.getChildren().addAll(usernameField, passwordField, loginButton,
-                createAccButton);
+        vbox.getChildren().addAll(txtTitle, txtUsername,usernameField, 
+                txtPassword, passwordField, loginButton, createAccButton);
 
         // Add the VBox to the center of the BorderPane
         borderPane.setCenter(vbox);
@@ -64,8 +80,17 @@ public class LoginView extends ScreenController {
         
         loginButton.setOnAction(event -> {
             String username = usernameField.getText();  
+            //Test if username is blank
+            if(username == null || username.trim().isEmpty()){
+                Warnings.emptyUsername();
+                return;
+            }
             String password = passwordField.getText();  
-
+            //Test if password is blank
+            if(password == null || password.trim().isEmpty()){
+                Warnings.emptyPassword();
+                return;
+            }
             try(Connection conn = DatabaseConnection.getConnection())
                 {
                     CallableStatement stmt = conn.prepareCall("{call AuthenticateUser(?, ?, ?)}");
@@ -78,6 +103,13 @@ public class LoginView extends ScreenController {
 
                     // Retrieve the return value from the output parameter
                     int result = stmt.getInt(3);
+                    
+                    if(result == 1){
+                        getRole(username);
+                    } else{
+                        //Warning window
+                        Warnings.loginError();
+                    }
 
                     System.out.println("Return value: " + result);
                 } catch (SQLException e) {
@@ -87,10 +119,49 @@ public class LoginView extends ScreenController {
         });
         
         createAccButton.setOnAction(event -> switchTo("create"));
+        return borderPane;
     }
 
+    /*
     // Getter for the BorderPane
-    public BorderPane getView() {
-        return borderPane;
+    public Supplier<Pane> getView() {
+        return this::buildLoginView;
+        //return borderPane;
+    }
+    */
+    
+    //After successful login look for user role.
+    //The role determine what screen you see.
+    public void getRole(String username){
+        String Username = username;
+        String role = null;
+        String sql = "SELECT role FROM dbo.P_Users WHERE username = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)){
+                
+                 pstmt.setString(1, Username);
+                try(ResultSet rs = pstmt.executeQuery()){
+                    if (rs.next()) {
+                        role = rs.getString("role");
+                        System.out.println(role);
+                    } 
+                }
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } 
+            //
+            if(role.equals("Admin")){
+                switchTo("debug");
+            } else if(role.equals("Tech")){
+                switchTo("workorder");
+            } else if(role.equals("Inventory")){
+                switchTo("inventory");
+            } else if(role.equals("Purchasing")){
+                switchTo("purchasing");
+            }
+            
+    
     }
 }

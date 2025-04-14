@@ -18,7 +18,8 @@ public class Validation {
 
     // Validate password at least 8 characters, one number, one uppercase letter)
     public static boolean isValidPassword(String password) {
-        return password != null && password.matches("^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+        return password != null && 
+                password.matches("^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$");
     }
 
 } //End Subclass Validation

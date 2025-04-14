@@ -10,7 +10,6 @@ public class ScreenController {
 
         public void switchTo(String screenName) {
             if (screenManager != null) {
-                System.out.println(screenName);
                 screenManager.showScreen(screenName);
             }
         }

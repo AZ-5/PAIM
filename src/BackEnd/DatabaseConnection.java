@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String URL = "jdbc:sqlserver://JONDESKTOP:1433;databaseName=PAIM;encrypt=false";
     private static final String USER = "java_test";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "12345";
 
     // Private constructor to prevent instantiation
     private DatabaseConnection() {}

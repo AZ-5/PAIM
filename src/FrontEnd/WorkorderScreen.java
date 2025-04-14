@@ -6,6 +6,7 @@ import BackEnd.DatabaseConnection;
 import BackEnd.Purchase;
 import BackEnd.WorkorderTable;
 import BackEnd.InventoryHandler;
+import BackEnd.Warnings;
 import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import javafx.scene.control.TableColumn;
 import java.time.LocalDate;
+import java.util.function.Supplier;
 import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Border;
@@ -37,10 +39,14 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 
 //Begin Subclass WorkorderScreen
 public class WorkorderScreen extends ScreenController{
     
+    public Supplier<Pane> getView(){
+        return this::buildWorkOrderView;
+    }
     private BorderPane borderPane;
     private BorderPane borderPane2;
     private BorderPane borderPane3;
@@ -61,7 +67,9 @@ public class WorkorderScreen extends ScreenController{
     private ComboBox<String> myAssignedWoCombo;
     private ComboBox<String> myCompleteWoCombo;
     
-    public WorkorderScreen(){
+    
+    private BorderPane buildWorkOrderView(){
+    //public WorkorderScreen(){
         // 
         borderPane = new BorderPane();
         borderPane2 = new BorderPane();
@@ -427,10 +435,9 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             updateWorkorder(orderID, statusID);
             inventoryHandler.createInventory(orderID);
         });
+        return borderPane;
     }
-    public BorderPane getView(){
-           return borderPane;
-       }     
+        
 
     //Reusable fucntion. Receives combo box and status id number
     //Returns the order ids that match the status id
@@ -438,6 +445,8 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             int StatusId){
         
         int statusId = StatusId;
+        
+        
         ObservableList<String> items = FXCollections.observableArrayList();
         String query = "SELECT w.workorder_id " 
                     + "FROM dbo.Workorder AS w " 
@@ -596,7 +605,13 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             pstmt.execute();
         }catch (SQLException e) {
                     e.printStackTrace();
-                }        
+                }   
+       
     }
     
+    /*
+    public BorderPane getView(){
+           return borderPane;
+       } 
+    */
 }//End Subclass WorkorderScreen

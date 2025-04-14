@@ -29,10 +29,16 @@ import javafx.scene.control.TableColumn;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
+import javafx.scene.layout.Pane;
 
 //Begin Subclass Purchasing
 public class Purchasing extends ScreenController {
-
+    
+    public Supplier<Pane> getView(){
+        return this::buildPurchasingView;
+    }
+    
     private BorderPane borderPane;
     private BorderPane borderPane2;
     private BorderPane borderPane3;
@@ -45,8 +51,8 @@ public class Purchasing extends ScreenController {
     private HBox hBox3;
     private TableView<Purchase> tableView;
     
-    
-    public Purchasing(){
+    private BorderPane buildPurchasingView(){
+    //public Purchasing(){
         //Set Panes
         borderPane = new BorderPane();
         borderPane2 = new BorderPane();
@@ -281,10 +287,11 @@ public class Purchasing extends ScreenController {
                 
         });
         
-        
+        return borderPane;
 }
-
+    /*
     public BorderPane getView(){
        return borderPane;
    }  
+    */
 } //End Subclass Purchasing

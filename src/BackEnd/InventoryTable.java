@@ -18,6 +18,9 @@ public class InventoryTable {
     private ObjectProperty<LocalDate> purchaseDate;
     private StringProperty status;
     private StringProperty location;
+    private StringProperty aisle;
+    private StringProperty bay;
+    private StringProperty shelf;
     
     //Itemid, partnumber, quantity,status_id, purchaseID
     public InventoryTable(int itemID, String partName, int quantity){
@@ -27,11 +30,13 @@ public class InventoryTable {
     }
 
 public InventoryTable(int itemID, String partName, int quantity, 
-        String location){
+        String aisle, String bay, String shelf){
         this.itemID = new SimpleIntegerProperty(itemID);
         this.partName = new SimpleStringProperty(partName);
         this.quantity = new SimpleIntegerProperty(quantity);
-        this.location = new SimpleStringProperty(location);
+        this.aisle = new SimpleStringProperty(aisle);
+        this.bay = new SimpleStringProperty(bay);
+        this.shelf = new SimpleStringProperty(shelf);
     }
     
     //Getter methods for returning 
@@ -43,4 +48,7 @@ public InventoryTable(int itemID, String partName, int quantity,
         return purchaseDate; }
     public StringProperty statusProperty(){ return status; } 
     public StringProperty locationProperty(){ return location; }
+    public StringProperty aisleProperty(){ return aisle; }
+    public StringProperty bayProperty(){ return bay; }
+    public StringProperty shelfProperty(){ return shelf; }
 } //End Subclass InventoryTable

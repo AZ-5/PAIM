@@ -97,6 +97,7 @@ public class InventoryHandler {
         return items;
     }
     
+    //Recieves user name. Calls the database and returns the user's ID
     public int userID(String selectedUser){
         String[] nameHalf = selectedUser.split(" ");
         if (nameHalf.length >= 2) { // Ensure there are at least two parts
@@ -131,10 +132,15 @@ public class InventoryHandler {
         return -1;
     }  
     
-    public void assignLocation(int ItemID, int userID, String Location){
+    //Receive itemID, userID, and location
+    //Call Insert Location Inventory and pass the above variables.
+    //This will update the location and status ID for inventory, purchasing,
+    // and workorder table
+    public void assignLocation(int ItemID, int userID, String Location,
+            int StatusID){
         int itemID = ItemID;
         String location = Location;
-       
+        int statusID = StatusID;
         
         //Add better data validation
         if(itemID == 0 || location.equals(null)){
@@ -144,15 +150,18 @@ public class InventoryHandler {
         try(Connection conn = DatabaseConnection.getConnection()){ 
             
             CallableStatement pstmt = conn.prepareCall("{call InsertLocationInventory("
-                            + "?, ?, ?)}");
+                            + "?, ?, ?, ?)}");
             pstmt.setInt(1, ItemID);
             pstmt.setString(2, location);// Set input username
             pstmt.setInt(3, userID);
+            pstmt.setInt(4, statusID);
             // Execute the stored procedure
             pstmt.execute();
         }catch (SQLException e) {
                     e.printStackTrace();
                 }       
-    }    
+    }  
+    
+
 
 } //End Subclass InventoryHandler

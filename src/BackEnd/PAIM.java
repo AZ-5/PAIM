@@ -46,7 +46,7 @@ public class PAIM extends Application {
         screenManager.addScreen("login", loginView.getView());
         screenManager.addScreen("debug", debugScreen.getView());
         screenManager.addScreen("purchasing", purchasingScreen.getView());
-        screenManager.addScreen("admin", adminScreen.getView());
+        //screenManager.addScreen("admin", adminScreen.getView());
         screenManager.addScreen("create", createAccScreen.getView());
         screenManager.addScreen("workorder", workorderScreen.getView());
         screenManager.addScreen("inventory", inventoryScreen.getView());

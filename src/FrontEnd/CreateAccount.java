@@ -2,12 +2,12 @@ package FrontEnd;
 //Imports
 import BackEnd.DatabaseConnection;
 import BackEnd.Validation;
+import static BackEnd.Validation.isValidEmail;
+import BackEnd.Warnings;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import java.util.function.Supplier;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,10 +15,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 
 //NOTES TO SELF. Need to validate all entries.
@@ -27,10 +29,16 @@ import javafx.scene.layout.HBox;
 //Begin Subclass CreateAccount
 public class CreateAccount extends ScreenController{
     
+    //Create new panes with Supplier. Supplier acts as a factory and will 
+    //create many different screens without throwing errors
+    public Supplier<Pane> getView(){
+        return this::buildCreateView;
+    }
     private BorderPane borderPane;
     private HBox hBox1;
     
-    public CreateAccount(){
+    private BorderPane buildCreateView(){
+    //public CreateAccount(){
         borderPane = new BorderPane();
         
         // Create labels and TextFields for use in AddUser Tab1
@@ -49,21 +57,14 @@ public class CreateAccount extends ScreenController{
 
         // Password Grid
         Label lblPassword = new Label("Password");
-        TextField passwordText = new TextField();
+        PasswordField passwordText = new PasswordField();
         Label lblPasswordWarning = new Label("Password: 8 characters/one uppercase"
                 + "/one number");
         gridPane.add(lblPassword, 1, 0);
         gridPane.add(passwordText, 1, 1);
         gridPane.add(lblPasswordWarning, 2, 1);
         
-
-        // Role Grid
-        Label lblRole = new Label("Role");
-        TextField roleText = new TextField();
-        gridPane.add(lblRole, 0, 4);
-        gridPane.add(roleText, 0, 5);
-
-        // First Name Grid
+       // First Name Grid
         Label lblFirstName = new Label("First Name");
         TextField firstNameText = new TextField();
         gridPane.add(lblFirstName, 0, 2);
@@ -80,6 +81,20 @@ public class CreateAccount extends ScreenController{
         TextField emailText = new TextField();
         gridPane.add(lblEmail, 2, 2);
         gridPane.add(emailText, 2, 3);
+        
+        // Role Grid
+        //Combo Box options
+        ObservableList<String> options = FXCollections.observableArrayList(
+            "Tech",
+            "Inventory",
+            "Purchasing");
+        
+        ComboBox rolePicker = new ComboBox(options);
+        rolePicker.setPromptText("Select a role");
+        Label lblRole = new Label("Role");
+        //TextField roleText = new TextField();
+        gridPane.add(lblRole, 0, 4);
+        gridPane.add(rolePicker, 0, 5);
         
         //Buttons 
         Button createAccountButton = new Button("Create Account");
@@ -98,11 +113,53 @@ public class CreateAccount extends ScreenController{
         createAccountButton.setOnAction(event -> {
             //Need to check if USername exists
             String userName = userNameText.getText();
-            String password = passwordText.getText();
-            String role = roleText.getText();
+            String password = new String(passwordText.getText());
+            String role;
+            //String role = roleText.getText();
             String firstName = firstNameText.getText();
             String lastName = lastNameText.getText();
             String email = emailText.getText();
+            
+            //Check if any values are empty
+            //Username if empty
+            if(userName == null || userName.trim().isEmpty()){
+                Warnings.emptyUsername();
+                return;
+            }
+            if(password == null || password.trim().isEmpty()){
+                Warnings.emptyPassword();
+                return;
+            }
+            if(rolePicker.getValue() == null){
+                Warnings.emptyRole();
+                return;
+            }else{
+                role = rolePicker.getValue().toString();
+            }
+            //if(role == null || role.trim().isEmpty()){
+                
+           // }
+            if(firstName == null || firstName.trim().isEmpty()){
+                Warnings.emptyFirstName();
+                return;
+            }
+            if(lastName == null || lastName.trim().isEmpty()){
+                Warnings.emptyLastName();
+                return;
+            }
+            if(email == null || email.trim().isEmpty()){
+                Warnings.emptyEmail();
+                return;
+            }
+            //check if correct
+            if(!Validation.isValidEmail(email)){
+                Warnings.incorrectEmail();
+                return;
+            }
+            if(!Validation.isValidPassword(password)){
+                Warnings.incorrectPassword();
+                return;
+            }
             
             try(Connection conn = DatabaseConnection.getConnection())
                 {
@@ -127,11 +184,13 @@ public class CreateAccount extends ScreenController{
         clearButton.setOnAction(event -> {
             
         });
+        return borderPane;
     }
     
-
+    /*
         // Getter for the BorderPane
     public BorderPane getView() {
         return borderPane;
     }
+    */
 } //End Subclass CreateAccount
