@@ -1,0 +1,1033 @@
+USE [master]
+GO
+/****** Object:  Database [PAIM]    Script Date: 3/30/2025 9:22:35 PM ******/
+CREATE DATABASE [PAIM]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'PAIM', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\PAIM.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'PAIM_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\PAIM_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+ALTER DATABASE [PAIM] SET COMPATIBILITY_LEVEL = 140
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [PAIM].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [PAIM] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [PAIM] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [PAIM] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [PAIM] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [PAIM] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [PAIM] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [PAIM] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [PAIM] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [PAIM] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [PAIM] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [PAIM] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [PAIM] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [PAIM] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [PAIM] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [PAIM] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [PAIM] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [PAIM] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [PAIM] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [PAIM] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [PAIM] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [PAIM] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [PAIM] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [PAIM] SET RECOVERY FULL 
+GO
+ALTER DATABASE [PAIM] SET  MULTI_USER 
+GO
+ALTER DATABASE [PAIM] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [PAIM] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [PAIM] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [PAIM] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [PAIM] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'PAIM', N'ON'
+GO
+ALTER DATABASE [PAIM] SET QUERY_STORE = OFF
+GO
+USE [PAIM]
+GO
+/****** Object:  User [java_test]    Script Date: 3/30/2025 9:22:35 PM ******/
+CREATE USER [java_test] FOR LOGIN [java_test] WITH DEFAULT_SCHEMA=[db_datareader]
+GO
+ALTER ROLE [db_owner] ADD MEMBER [java_test]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [java_test]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [java_test]
+GO
+/****** Object:  Schema [User]    Script Date: 3/30/2025 9:22:35 PM ******/
+CREATE SCHEMA [User]
+GO
+/****** Object:  Table [dbo].[Customer]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer](
+	[customer_id] [int] IDENTITY(1,1) NOT NULL,
+	[customer_name] [nvarchar](50) NOT NULL,
+	[phone_number] [nvarchar](50) NULL,
+	[address_id] [int] NOT NULL,
+ CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
+(
+	[customer_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer_Address]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer_Address](
+	[address_id] [int] IDENTITY(1,1) NOT NULL,
+	[street] [nvarchar](50) NOT NULL,
+	[city_id] [int] NOT NULL,
+	[zip_code_id] [int] NOT NULL,
+ CONSTRAINT [PK_Customer_Address] PRIMARY KEY CLUSTERED 
+(
+	[address_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer_LUCity]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer_LUCity](
+	[city_id] [int] IDENTITY(1,1) NOT NULL,
+	[city_name] [nvarchar](50) NOT NULL,
+	[state_id] [int] NOT NULL,
+ CONSTRAINT [PK_Customer_LUCity] PRIMARY KEY CLUSTERED 
+(
+	[city_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer_LUCountry]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer_LUCountry](
+	[country_id] [int] IDENTITY(1,1) NOT NULL,
+	[country_name] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Customer_LUCountry] PRIMARY KEY CLUSTERED 
+(
+	[country_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer_LUStateID]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer_LUStateID](
+	[state_id] [int] IDENTITY(1,1) NOT NULL,
+	[state_name] [nvarchar](50) NOT NULL,
+	[country_id] [int] NOT NULL,
+ CONSTRAINT [PK_Customer_LUStateID] PRIMARY KEY CLUSTERED 
+(
+	[state_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer_ZipCode]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer_ZipCode](
+	[zip_code_id] [int] IDENTITY(1,1) NOT NULL,
+	[zip_code] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Customer_ZipCode] PRIMARY KEY CLUSTERED 
+(
+	[zip_code_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Inventory]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Inventory](
+	[item_id] [int] IDENTITY(1,1) NOT NULL,
+	[location] [nvarchar](50) NULL,
+	[i_user_id] [int] NULL,
+	[part_number] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[status_id] [int] NULL,
+	[purchase_id] [int] NULL,
+ CONSTRAINT [PK_Inventory] PRIMARY KEY CLUSTERED 
+(
+	[item_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LU_Price]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LU_Price](
+	[part_number] [int] NOT NULL,
+	[unit_price] [int] NOT NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LU_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LU_Status](
+	[status_id] [int] NOT NULL,
+	[status] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_LU_Status] PRIMARY KEY CLUSTERED 
+(
+	[status_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LUPartName]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LUPartName](
+	[part_number] [int] NOT NULL,
+	[part_name] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_LUPartName] PRIMARY KEY CLUSTERED 
+(
+	[part_number] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[P_Users]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[P_Users](
+	[user_id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [nvarchar](50) NOT NULL,
+	[email] [nvarchar](100) NULL,
+	[password_hash] [varbinary](64) NOT NULL,
+	[first_name] [nvarchar](50) NULL,
+	[last_name] [nvarchar](50) NULL,
+	[role] [nvarchar](50) NOT NULL,
+	[password_salt] [varbinary](32) NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Product_LU_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Product_LU_Status](
+	[status_id] [int] NOT NULL,
+	[status_desc] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Product_LU_Status] PRIMARY KEY CLUSTERED 
+(
+	[status_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Product_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Product_Status](
+	[status_id] [int] NOT NULL,
+	[purchase_id] [int] NULL,
+ CONSTRAINT [PK_Product_Status] PRIMARY KEY CLUSTERED 
+(
+	[status_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Purchasing]    Script Date: 3/30/2025 9:22:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Purchasing](
+	[purchase_id] [int] IDENTITY(1,1) NOT NULL,
+	[item_id] [int] NULL,
+	[user_id] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[purchase_date] [datetime] NOT NULL,
+	[status] [nvarchar](50) NOT NULL,
+	[part_number] [int] NULL,
+	[customer_id] [int] NULL,
+	[status_id] [int] NULL,
+ CONSTRAINT [PK_Purchasing] PRIMARY KEY CLUSTERED 
+(
+	[purchase_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Workorder]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Workorder](
+	[workorder_id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NULL,
+	[quantity] [int] NULL,
+	[status_id] [int] NULL,
+	[part_number] [int] NOT NULL,
+	[complete_date] [datetime] NULL,
+	[purchase_id] [int] NULL,
+ CONSTRAINT [PK_Workorder] PRIMARY KEY CLUSTERED 
+(
+	[workorder_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [User].[User_Log]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [User].[User_Log](
+	[user_id] [int] NOT NULL,
+	[session_id] [int] NOT NULL,
+	[session_start] [datetime] NULL,
+	[session_end] [datetime] NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Customer]  WITH CHECK ADD  CONSTRAINT [FK_Customer_Customer_Address] FOREIGN KEY([address_id])
+REFERENCES [dbo].[Customer_Address] ([address_id])
+GO
+ALTER TABLE [dbo].[Customer] CHECK CONSTRAINT [FK_Customer_Customer_Address]
+GO
+ALTER TABLE [dbo].[Customer_Address]  WITH CHECK ADD  CONSTRAINT [FK_Customer_Address_Customer_LUCity] FOREIGN KEY([city_id])
+REFERENCES [dbo].[Customer_LUCity] ([city_id])
+GO
+ALTER TABLE [dbo].[Customer_Address] CHECK CONSTRAINT [FK_Customer_Address_Customer_LUCity]
+GO
+ALTER TABLE [dbo].[Customer_Address]  WITH CHECK ADD  CONSTRAINT [FK_Customer_Address_Customer_ZipCode] FOREIGN KEY([zip_code_id])
+REFERENCES [dbo].[Customer_ZipCode] ([zip_code_id])
+GO
+ALTER TABLE [dbo].[Customer_Address] CHECK CONSTRAINT [FK_Customer_Address_Customer_ZipCode]
+GO
+ALTER TABLE [dbo].[Customer_LUCity]  WITH CHECK ADD  CONSTRAINT [FK_Customer_LUCity_Customer_LUStateID] FOREIGN KEY([state_id])
+REFERENCES [dbo].[Customer_LUStateID] ([state_id])
+GO
+ALTER TABLE [dbo].[Customer_LUCity] CHECK CONSTRAINT [FK_Customer_LUCity_Customer_LUStateID]
+GO
+ALTER TABLE [dbo].[Customer_LUStateID]  WITH CHECK ADD  CONSTRAINT [FK_Customer_LUStateID_Customer_LUCountry] FOREIGN KEY([country_id])
+REFERENCES [dbo].[Customer_LUCountry] ([country_id])
+GO
+ALTER TABLE [dbo].[Customer_LUStateID] CHECK CONSTRAINT [FK_Customer_LUStateID_Customer_LUCountry]
+GO
+ALTER TABLE [dbo].[Inventory]  WITH CHECK ADD  CONSTRAINT [FK_Inventory_LUPartName1] FOREIGN KEY([part_number])
+REFERENCES [dbo].[LUPartName] ([part_number])
+GO
+ALTER TABLE [dbo].[Inventory] CHECK CONSTRAINT [FK_Inventory_LUPartName1]
+GO
+ALTER TABLE [dbo].[Inventory]  WITH CHECK ADD  CONSTRAINT [FK_Inventory_P_Users] FOREIGN KEY([i_user_id])
+REFERENCES [dbo].[P_Users] ([user_id])
+GO
+ALTER TABLE [dbo].[Inventory] CHECK CONSTRAINT [FK_Inventory_P_Users]
+GO
+ALTER TABLE [dbo].[Inventory]  WITH CHECK ADD  CONSTRAINT [FK_Inventory_Purchasing] FOREIGN KEY([purchase_id])
+REFERENCES [dbo].[Purchasing] ([purchase_id])
+GO
+ALTER TABLE [dbo].[Inventory] CHECK CONSTRAINT [FK_Inventory_Purchasing]
+GO
+ALTER TABLE [dbo].[Purchasing]  WITH CHECK ADD  CONSTRAINT [FK_Purchasing_Customer] FOREIGN KEY([customer_id])
+REFERENCES [dbo].[Customer] ([customer_id])
+GO
+ALTER TABLE [dbo].[Purchasing] CHECK CONSTRAINT [FK_Purchasing_Customer]
+GO
+ALTER TABLE [dbo].[Purchasing]  WITH CHECK ADD  CONSTRAINT [FK_Purchasing_LUPartName] FOREIGN KEY([part_number])
+REFERENCES [dbo].[LUPartName] ([part_number])
+GO
+ALTER TABLE [dbo].[Purchasing] CHECK CONSTRAINT [FK_Purchasing_LUPartName]
+GO
+ALTER TABLE [dbo].[Workorder]  WITH CHECK ADD  CONSTRAINT [FK_Workorder_LUPartName] FOREIGN KEY([part_number])
+REFERENCES [dbo].[LUPartName] ([part_number])
+GO
+ALTER TABLE [dbo].[Workorder] CHECK CONSTRAINT [FK_Workorder_LUPartName]
+GO
+ALTER TABLE [dbo].[Workorder]  WITH CHECK ADD  CONSTRAINT [FK_Workorder_Purchasing] FOREIGN KEY([purchase_id])
+REFERENCES [dbo].[Purchasing] ([purchase_id])
+GO
+ALTER TABLE [dbo].[Workorder] CHECK CONSTRAINT [FK_Workorder_Purchasing]
+GO
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[AuthenticateUser]
+    @Username NVARCHAR(50),
+    @Password NVARCHAR(100),
+	@ReturnValue INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @StoredSalt VARBINARY(32);
+    DECLARE @StoredHash VARBINARY(64);
+    DECLARE @ComputedHash VARBINARY(64);
+	
+	IF NOT EXISTS (SELECT 1 FROM PAIM.dbo.P_Users WHERE username = @Username)
+	BEGIN
+		PRINT 'Authentication failed'
+		SET @ReturnValue = 0;
+		RETURN;
+	END;
+
+    -- Store the password_hash and password_salt for use down below
+    SELECT @StoredSalt = password_salt, 
+           @StoredHash = password_hash
+    FROM PAIM.dbo.P_Users
+    WHERE username = @Username;
+
+    -- If no matching user found, return failure
+    IF @StoredSalt IS NULL OR @StoredHash IS NULL
+    BEGIN
+        PRINT 'Authentication failed';
+		SET @ReturnValue = 0;
+        RETURN 0;
+    END
+
+    -- Compute the hash of the provided password with the stored salt
+    SET @ComputedHash = HASHBYTES('SHA2_512', @Password + CONVERT(NVARCHAR(100), @StoredSalt));
+
+    -- Compare the computed hash with the stored hash
+    IF @ComputedHash = @StoredHash
+    BEGIN
+        PRINT 'Authentication successful';
+		SET @ReturnValue = 1;
+        RETURN 1;
+    END
+    ELSE
+    BEGIN
+        PRINT 'Authentication failed: Incorrect password';
+		SET @ReturnValue = 0;
+        RETURN 0;
+    END
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertCustomer]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertCustomer]
+	@customer_name nvarchar(50),
+	@phone_number nvarchar(50),
+	@street nvarchar(50),
+	@city nvarchar(50),
+	@state nvarchar(50),
+	@country nvarchar(50),
+	@zip_code nvarchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @country_id int, @state_id int, @city_id int, @zip_code_id int, @address_id int;
+	BEGIN TRY
+		BEGIN TRANSACTION
+		
+		--First check if country exists
+		SELECT @country_id = country_id 
+		FROM Customer_LUCountry
+		WHERE country_name = @country;
+
+		IF @country_id IS NULL
+		BEGIN
+			INSERT INTO Customer_LUCountry (country_name) VALUES (@country);
+			SET @country_id = CAST(SCOPE_IDENTITY() AS INT);
+		END;
+
+		--Checks if State name and country name exist from state ID. If not
+		-- then we will insert State into table and assign the country_id from above
+		SELECT @state_id = state_id 
+		FROM Customer_LUStateID 
+		WHERE state_name = @state AND country_id = @country_id;
+
+		IF @state_id IS NULL
+		BEGIN
+			INSERT INTO Customer_LUStateID(state_name, country_id) VALUES (@state, @country_id);
+			SET @state_id = CAST(SCOPE_IDENTITY() AS INT);
+		END;
+
+		--Checks if city exists. If it doesn't will add state id and country id
+		SELECT @city_id = city_id
+		FROM Customer_LUCity
+		WHERE city_name = @city
+		AND state_id = @state_id;
+
+		IF @city_id IS NULL
+		BEGIN
+			INSERT INTO Customer_LUCity(city_name, state_id) VALUES (@city, @state_id)
+			SET @city_id = CAST(SCOPE_IDENTITY() AS INT);
+		END;
+
+		--Checks if Zip Code exists. Will create a zip code row if not. Will return zipcode_id for later use
+		SELECT @zip_code_id = zip_code_id
+		FROM Customer_ZipCode
+		WHERE zip_code = @zip_code;
+
+		IF @zip_code_id IS NULL
+		BEGIN
+			INSERT INTO Customer_ZipCode(zip_code) VALUES (@zip_code);
+			SET @zip_code_id = CAST(SCOPE_IDENTITY() AS INT);
+		END;
+
+		-- Use values from city and zipcode sections to fill address 
+		INSERT INTO Customer_Address (street, city_id, zip_code_id)
+		VALUES(@street, @city_id, @zip_code_id);
+		SET @address_id = CAST(SCOPE_IDENTITY() AS INT);
+
+		--Insert data from all above sections into Customer
+		INSERT INTO Customer(customer_name, phone_number, address_id)
+		VALUES (@customer_name, @phone_number, @address_id);
+
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+
+		THROW;
+	END CATCH
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertInventory]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertInventory]
+	@orderID int
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+	BEGIN TRANSACTION;
+
+	DECLARE
+	@quantity int,
+	@purchaseID int,
+	@statusID int,
+	@partNumber int;
+
+		IF NOT EXISTS(
+			SELECT 1
+			FROM dbo.Workorder
+			WHERE workorder_id = @orderID
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No item exists', 16, 1);
+			RETURN;
+		END;
+
+		--Assign all variables the values from the @orderID row in the Wokorder table
+		SELECT @quantity = quantity, @statusID = status_id, @purchaseID = purchase_id, @partNumber = part_number
+		FROM dbo.Workorder
+		WHERE workorder_id = @orderID;
+
+		IF @partNumber IS NULL OR @quantity IS NULL OR @statusID IS NULL OR @purchaseID IS NULL
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('Missing values from Order ID row', 16, 1);
+		END;
+
+		INSERT INTO dbo.Inventory(part_number, quantity, status_id, purchase_id)
+		VALUES (@partNumber, @quantity, @statusID, @purchaseID)
+/*
+		IF EXISTS(
+			SELECT 1
+			FROM dbo.Inventory
+			WHERE Inventory.location = Inventory.location
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('Item already stored at that location', 16, 1);
+		END;
+
+		DECLARE @SQL NVARCHAR(MAX) =
+			'INSERT INTO dbo.Inventory(location, i_user_id, part_number, quantity)
+			VALUES (@location, @i_user_id, @part_number, @quantity)';
+		
+		EXEC sp_executesql
+		@SQL,
+			N' @location nvarchar(50),
+			@i_user_id int,
+			@part_number int,
+			@quantity int',
+			@location, @i_user_id, @part_number, @quantity;
+*/
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertLocationInventory]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertLocationInventory]
+@itemID int,
+@location nvarchar(50),
+@userID int
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+	BEGIN TRANSACTION;
+	DECLARE 
+	@purchaseID int,
+	@workorderID int
+
+	IF NOT EXISTS(
+		SELECT 1
+		FROM dbo.Inventory
+		WHERE item_id = @itemID
+		)
+	BEGIN
+		ROLLBACK TRANSACTION
+		RAISERROR('No item exists', 16, 1);
+		RETURN;
+	END;
+
+	--Get purchaseID to update status in purchasing 
+	SELECT @purchaseID = purchase_id
+	FROM dbo.Inventory
+	WHERE item_id = @itemID;
+
+	--If purchase ID does not exist roll back 
+	if @purchaseID IS NULL
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No purchase ID found for the given workorder', 16, 1);
+			RETURN;
+	END;
+
+	--Get workorderID to update status in workorder 
+	SELECT @workorderID = workorder_id
+	FROM dbo.Workorder
+	WHERE purchase_id = @purchaseID
+
+	--Update status_id in purchase table
+	UPDATE dbo.Purchasing
+	SET status_id = 5
+	WHERE purchase_id = @purchaseID	
+
+	UPDATE dbo.Workorder
+	SET status_id = 5
+	WHERE workorder_id = @workorderID
+
+	UPDATE dbo.Inventory
+	SET Inventory.location = @location, Inventory.status_id = 5, Inventory.i_user_id = @userID
+	WHERE item_id = @itemID
+
+COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertPurchase]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertPurchase]
+	@user_id int,
+	@quantity int,
+	@purchase_date datetime,
+	@part_name nvarchar(50),
+	@customer_name nvarchar(50)
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @purchase_id int;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		--Check if customer name exists. 
+		IF NOT EXISTS(
+			SELECT 1
+			FROM dbo.Customer
+			WHERE customer_name = @customer_name
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No customer exists. Please insert customer data first', 16, 1);
+		END;
+		--Assign customer_id lookup of customer name
+		DECLARE @customer_id int;
+		SELECT @customer_id = customer_id FROM dbo.Customer WHERE customer_name = @customer_name;
+
+		--Check if part name exists. 
+		IF NOT EXISTS(
+			SELECT 1
+			FROM dbo.LUPartName
+			WHERE part_name = @part_name
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No Part exists. Please insert Part first', 16, 1);
+		END;
+
+		--Look up the part number from LUPartname table
+		--If part name exists then @part_number will be assigned.
+		DECLARE @part_number int;
+		SELECT @part_number = part_number FROM dbo.LUPartName WHERE part_name = @part_name;
+
+		-- Dynamic SQL statement. Helps handle user input and prevent injection attacks
+		-- This statement is inserting into the purchasing the purchasing table.
+		DECLARE @SQL NVARCHAR(MAX) =
+			'Insert INTO dbo.Purchasing(user_id, quantity, purchase_date, status_id, part_number, customer_id, status)
+			VALUES (@user_id, @quantity, @purchase_date, 1, @part_number, @customer_id, ''purchased'');
+			 SET @purchase_id = CAST(SCOPE_IDENTITY() AS INT);';
+		
+
+
+		-- Execute the @SQL statement above
+		EXEC sp_executesql
+		@SQL,
+			N'	@user_id int,
+			@quantity int,
+			@purchase_date datetime,
+			@part_number int,
+			@customer_id int,
+			@purchase_id int OUTPUT',
+		@user_id, @quantity, @purchase_date, @part_number, @customer_id, @purchase_id OUTPUT;
+
+		-- Need to make dynamic sql in the future
+		EXEC dbo.InsertWorkorder @quantity, @part_number, @purchase_id;
+
+		-- Need to add another stored procedure that will add 
+
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertTech]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertTech]
+	@OrderID int,
+	@EmployeeID int
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+	BEGIN TRANSACTION;
+	
+	DECLARE @purchaseID int;
+
+		--Prevent errors occuring if work_order ID doesn't exists.
+		IF NOT EXISTS(
+			SELECT 1
+			FROM dbo.Workorder
+			WHERE workorder_id = @OrderID
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No item exists', 16, 1);
+			RETURN;
+		END;
+
+		--Get purchaseID to update status in purchasing 
+		SELECT @purchaseID = purchase_id
+		FROM dbo.Workorder
+		WHERE workorder_id = @OrderID;
+
+		--If purchase ID does not exist roll back 
+		if @purchaseID IS NULL
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No purchase ID found for the given workorder', 16, 1);
+			RETURN;
+		END;
+		--Update workorder with employee ID and set status to 2
+		UPDATE dbo.Workorder
+		SET user_id= @EmployeeID, status_id = 2
+		WHERE workorder_id = @OrderID;
+
+		--Update status_id in purchase table
+		UPDATE dbo.Purchasing
+		SET status_id = 2
+		WHERE purchase_id = @purchaseID	
+
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertUser]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertUser]
+    @Username NVARCHAR(50),
+    @Email NVARCHAR(100) = NULL,
+    @Password NVARCHAR(100),  -- Accept plain-text password
+    @FirstName NVARCHAR(50) = NULL,
+    @LastName NVARCHAR(50) = NULL,
+    @Role NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+	BEGIN TRY
+		--Making a transaction that will check if the username name or email already exist. IF it does it will rollback
+		BEGIN TRANSACTION;
+
+        IF EXISTS (
+            SELECT 1 
+            FROM dbo.P_Users  
+            WHERE username = @Username 
+               OR (email = @Email AND @Email IS NOT NULL) 
+               OR (first_name = @FirstName AND last_name = @LastName AND @FirstName IS NOT NULL AND @LastName IS NOT NULL)
+        )
+		BEGIN 
+			ROLLBACK TRANSACTION;
+			RAISERROR('Error: A user with the given details already exists.', 16, 1);
+			RETURN;
+		END;
+
+		DECLARE @PasswordSalt VARBINARY(32);
+		DECLARE @PasswordHash VARBINARY(64);
+    
+		-- Generate a cryptographically secure salt (32 bytes)
+		SET @PasswordSalt = CRYPT_GEN_RANDOM(32);
+
+		-- Hash the password with the salt using SHA-512
+		SET @PasswordHash = HASHBYTES('SHA2_512', @Password + CONVERT(NVARCHAR(100), @PasswordSalt));
+
+		-- Define the SQL query
+		DECLARE @SQL NVARCHAR(MAX) = 
+			'INSERT INTO P_Users (username, email, password_hash, first_name, last_name, role, password_salt)
+			VALUES (@Username, @Email, @PasswordHash, @FirstName, @LastName, @Role, @PasswordSalt);';
+
+		-- Use of prepared statment. No injection with this
+		EXEC sp_executesql 
+		 @SQL, 
+				N'@Username NVARCHAR(50), 
+			   @Email NVARCHAR(100), 
+			  @PasswordHash VARBINARY(64), 
+			  @FirstName NVARCHAR(50), 
+              @LastName NVARCHAR(50), 
+              @Role NVARCHAR(50), 
+              @PasswordSalt VARBINARY(32)',
+           @Username, @Email, @PasswordHash, @FirstName, @LastName, @Role, @PasswordSalt;
+
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertWorkorder]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertWorkorder]
+	@quantity int,
+	@part_number int,
+	@purchase_id int
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+		Declare @workorder_id int;
+		SET @workorder_id = CAST(@@IDENTITY AS INT);
+
+		-- Simple insertion for workorder. Only quantity and partnumber handled
+		-- Manager Insert will assign user_id to Workorder table
+		-- InsertPurchase will insert purchase_id
+		--DECLARE @SQL NVARCHAR(MAX) = 
+		INSERT INTO dbo.Workorder(quantity, part_number, purchase_id, status_id)
+		VALUES (@quantity, @part_number, @purchase_id, '1')
+
+
+		--SET @workorder_id = CAST(SCOPE_IDENTITY() AS INT);
+		
+		--EXEC sp_executesql
+		--@SQL,
+		--	N'@quantity int,
+		--	@part_number int',
+		--	@quantity, @part_number;
+		
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateStatus]    Script Date: 3/30/2025 9:22:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateStatus]
+
+@orderID int,
+@status_id int
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+	BEGIN TRANSACTION;
+	
+	DECLARE @purchaseID int;
+	--Prevent errors occuring if work_order ID doesn't exists.
+		IF NOT EXISTS(
+			SELECT 1
+			FROM dbo.Workorder
+			WHERE workorder_id = @OrderID
+			)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No item exists', 16, 1);
+			RETURN;
+		END;
+
+		--Checks if user exists. Prevents status_id preceeding past being assigned. 
+		IF EXISTS (
+			SELECT 1
+			FROM dbo.Workorder
+			WHERE workorder_id = @orderID
+			AND (user_id IS NULL)
+		)
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No item exists', 16, 1);
+			RETURN;
+		END
+
+		--Get purchaseID to update status in purchasing 
+		SELECT @purchaseID = purchase_id
+		FROM dbo.Workorder
+		WHERE workorder_id = @OrderID;
+
+		--If purchase ID does not exist roll back 
+		if @purchaseID IS NULL
+		BEGIN
+			ROLLBACK TRANSACTION
+			RAISERROR('No purchase ID found for the given workorder', 16, 1);
+			RETURN;
+		END;
+
+		--Update workorder with employee ID and set status to 2
+		UPDATE dbo.Workorder
+		SET status_id = @status_id
+		WHERE workorder_id = @OrderID;
+
+		--Update status_id in purchase table
+		UPDATE dbo.Purchasing
+		SET status_id = @status_id
+		WHERE purchase_id = @purchaseID	
+
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		--Grabs the error
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	END CATCH;
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [PAIM] SET  READ_WRITE 
+GO
