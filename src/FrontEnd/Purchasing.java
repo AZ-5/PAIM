@@ -18,6 +18,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import BackEnd.Purchase;
+import BackEnd.Validation;
+import BackEnd.Warnings;
 import java.sql.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -235,6 +237,52 @@ public class Purchasing extends ScreenController {
             String state = stateText.getText();
             String zipCode = zipText.getText();
             String country = countryText.getText();
+            //Error handling for all inputs
+            if (name == null || name.trim().isEmpty()) {
+                Warnings.emptyCustomerName();
+                return;
+            }
+
+            if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+                Warnings.emptyPhoneNumber();
+                return;
+            }
+
+            if (streetAddress == null || streetAddress.trim().isEmpty()) {
+                Warnings.emptyStreetAddress();
+                return;
+            }
+
+            if (city == null || city.trim().isEmpty()) {
+                Warnings.emptyCity();
+                return;
+            }
+
+            if (state == null || state.trim().isEmpty()) {
+                Warnings.emptyState();
+                return;
+            }
+
+            if (country == null || country.trim().isEmpty()) {
+                Warnings.emptyCountry();
+                return;
+            }
+            
+            if (zipCode == null || zipCode.trim().isEmpty()) {
+                Warnings.emptyCountry();
+                return;
+            }
+            //Validate if the phone number is numbers and the correc length
+            if (!Validation.isValidPhoneNumber(phoneNumber)) {
+                Warnings.incorrectPhoneNumber(); 
+                return;
+            }
+
+            if (!Validation.isValidZipCode(zipCode)) {
+                Warnings.incorrectZipCode(); 
+                return;
+            }            
+            
             
             try(Connection conn = DatabaseConnection.getConnection())
                 {
@@ -259,12 +307,49 @@ public class Purchasing extends ScreenController {
         
         submitPurchase.setOnAction(e -> {
             //Add error handling in case the value isn't an int
-            int quantity = Integer.parseInt(quanityText.getText());
+            int quantity;
             String customer = customerText.getText();
             LocalDate date = PurchaseDate.getValue();
-            String part = partPicker.getValue().toString();
-            System.out.println(date);
+            String part;
             int user = 1;
+            
+            //First test if int quantity has a value. If not throw an error.
+            String quantityInput = quanityText.getText();
+            if (quantityInput == null || quantityInput.trim().isEmpty()) {
+                Warnings.emptyQuantity(); 
+                return;
+            } //Try to assign the 
+            try {
+                quantity = Integer.parseInt(quantityInput);
+                if (quantity <= 0) {
+                    Warnings.invalidQuantity(); 
+                    return;
+                }
+            } catch (NumberFormatException event) {
+                Warnings.invalidQuantity(); 
+                return;
+            }
+
+            // Customer if empty throw an error
+            if (customer == null || customer.trim().isEmpty()) {
+                Warnings.emptyCustomer(); 
+                return;
+            }
+
+            // Purchase Date
+            if (date == null) {
+                Warnings.emptyPurchaseDate(); 
+                return;
+            }
+
+            // Part selection error handling. IF empty
+            if (partPicker.getValue() == null) {
+                Warnings.emptyPart(); 
+                return;
+            }
+            //If I convert this to a string off the bat. IT will always throw
+            // an error
+            part = partPicker.getValue().toString();    
             
             try(Connection conn = DatabaseConnection.getConnection())
                 {
@@ -289,9 +374,33 @@ public class Purchasing extends ScreenController {
         
         return borderPane;
 }
-    /*
-    public BorderPane getView(){
-       return borderPane;
-   }  
-    */
+    public void showOpenOrders(){
+        ObservableList<Purchase> purchases = FXCollections.observableArrayList();
+            String sql = "SELECT p.purchase_id, cus.customer_name, lp.part_name, " 
+                    + "p.quantity, p.purchase_date " 
+                    + "FROM dbo.Purchasing AS p " 
+                    + "JOIN dbo.Customer AS cus ON p.customer_id = cus.customer_id " 
+                    + "JOIN dbo.LUPartName AS lp ON p.part_number = lp.part_number;";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int purchaseId = rs.getInt("purchase_id");
+                    String customerName = rs.getString("customer_name");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    LocalDate purchaseDate = rs.getDate("purchase_date").toLocalDate();
+
+                    Purchase purchase = new Purchase(purchaseId, customerName, 
+                            partName, quantity, purchaseDate);
+                    purchases.add(purchase);
+                    tableView.setItems(purchases);
+                }
+            } catch (SQLException event) {
+                event.printStackTrace();
+            }
+    }
+    
 } //End Subclass Purchasing

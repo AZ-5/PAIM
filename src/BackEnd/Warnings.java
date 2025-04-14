@@ -88,6 +88,75 @@ public class Warnings {
                     + "and one number.");
             alert.showAndWait();        
         }
+        public static void emptyCustomerName(){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Customer name is empty");
+            alert.setContentText("Please input a customer name first");
+            alert.showAndWait();        
+        }
+        public static void emptyPhoneNumber(){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Phone number is empty");
+            alert.setContentText("Please input a phone number first");
+            alert.showAndWait();        
+        }
+        public static void emptyStreetAddress() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Street address is empty");
+            alert.setContentText("Please input a street address.");
+            alert.showAndWait();
+        }
+
+        public static void emptyCity() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("City is empty");
+            alert.setContentText("Please input a city.");
+            alert.showAndWait();
+        }
+
+        public static void emptyState() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("State is empty");
+            alert.setContentText("Please input a state.");
+            alert.showAndWait();
+        }
+
+        public static void emptyCountry() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Country is empty");
+            alert.setContentText("Please input a country.");
+            alert.showAndWait();
+        }
+
+        public static void emptyZipCode() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Zip code is empty");
+            alert.setContentText("Please input a zip code.");
+            alert.showAndWait();
+        }
+        public static void incorrectPhoneNumber() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Invalid Phone Number");
+            alert.setContentText("Phone number must be 10 digits and contain only numbers.");
+            alert.showAndWait();
+        }
+
+        public static void incorrectZipCode() {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Invalid Zip Code");
+            alert.setContentText("Zip code must be 5 digits and contain "
+                    + "only numbers.");
+            alert.showAndWait();
+        }
         public static void emptyKey(){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
@@ -109,4 +178,49 @@ public class Warnings {
             alert.setContentText("Username and/or password incorrect");
             alert.showAndWait();        
         } 
+        
+        public static void emptyQuantity() {
+            showAlert("Quantity is empty", "Please enter a quantity.");
+        }
+
+        public static void invalidQuantity() {
+            showAlert("Invalid quantity", "Please enter a valid positive "
+                    + "number.");
+        }
+
+        public static void emptyCustomer() {
+            showAlert("Customer is empty", "Please enter a customer name.");
+        }
+
+        public static void emptyPurchaseDate() {
+            showAlert("Purchase date is empty", "Please select a "
+                    + "purchase date.");
+        }
+
+        public static void emptyPart() {
+            showAlert("Part is empty", "Please select a part.");
+        }
+        
+        public static void emptyUser() {
+            showAlert("User not selected", "Please select a user "
+                    + "from the list.");
+        }
+
+        public static void emptyWorkOrder() {
+            showAlert("Work order not selected", "Please select a "
+                    + "work order.");
+        }
+
+        public static void invalidWorkOrder() {
+            showAlert("Invalid work order ID", "Work order must be a number "
+                    + "greater than 0.");
+        }
+        //Prints the alerts
+        private static void showAlert(String header, String content) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(header);
+            alert.setContentText(content);
+            alert.showAndWait();
+        }
 } //End Subclass Warnings

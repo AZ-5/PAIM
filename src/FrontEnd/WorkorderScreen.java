@@ -407,11 +407,36 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
         });
         
         assignWorkorder.setOnAction(event -> {
+            //String user = myComboBox.getValue().toString();
+            //int orderID = Integer.parseInt(myWoComboBox.getValue());
+            
+            // Check if user is selected
+            if (myComboBox.getValue() == null) {
+                Warnings.emptyUser(); // You'll need to define this method
+                return;
+            }
             String user = myComboBox.getValue().toString();
-            int orderID = Integer.parseInt(myWoComboBox.getValue());
+
+            // Check if work order ID is selected
+            if (myWoComboBox.getValue() == null) {
+                Warnings.emptyWorkOrder(); // You'll need to define this method
+                return;
+            }
+
+            int orderID;
+            try {
+                orderID = Integer.parseInt(myWoComboBox.getValue());
+                if (orderID <= 0) {
+                    Warnings.invalidWorkOrder(); // Optional: non-positive ID
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                Warnings.invalidWorkOrder(); // Non-numeric value
+                return;
+            }
+
+            // Call userID only after validation
             int userId = userID(user);
-            System.out.println(userId);
-            System.out.println(orderID);
 
             assignWorkorder(orderID, userId);
             //Update assigned workorder combobox, so the combobox always 

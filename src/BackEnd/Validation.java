@@ -21,5 +21,13 @@ public class Validation {
         return password != null && 
                 password.matches("^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$");
     }
+    //Test if string is a number and if it is 10 digits long
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("\\d{10}");
+    }
+    //Test if string is a number and if it is 5 digits long
+    public static boolean isValidZipCode(String zipCode) {
+        return zipCode != null && zipCode.matches("\\d{5}");
+    }
 
 } //End Subclass Validation
