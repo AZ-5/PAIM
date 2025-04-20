@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [PAIM]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Database [PAIM]    Script Date: 4/19/2025 11:18:20 PM ******/
 CREATE DATABASE [PAIM]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -79,7 +79,7 @@ ALTER DATABASE [PAIM] SET QUERY_STORE = OFF
 GO
 USE [PAIM]
 GO
-/****** Object:  User [java_test]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  User [java_test]    Script Date: 4/19/2025 11:18:20 PM ******/
 CREATE USER [java_test] FOR LOGIN [java_test] WITH DEFAULT_SCHEMA=[db_datareader]
 GO
 ALTER ROLE [db_owner] ADD MEMBER [java_test]
@@ -88,10 +88,10 @@ ALTER ROLE [db_datareader] ADD MEMBER [java_test]
 GO
 ALTER ROLE [db_datawriter] ADD MEMBER [java_test]
 GO
-/****** Object:  Schema [User]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Schema [User]    Script Date: 4/19/2025 11:18:20 PM ******/
 CREATE SCHEMA [User]
 GO
-/****** Object:  Table [dbo].[Customer]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -107,7 +107,7 @@ CREATE TABLE [dbo].[Customer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_Address]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer_Address]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -123,7 +123,7 @@ CREATE TABLE [dbo].[Customer_Address](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_LUCity]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer_LUCity]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -138,7 +138,7 @@ CREATE TABLE [dbo].[Customer_LUCity](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_LUCountry]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer_LUCountry]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -152,7 +152,7 @@ CREATE TABLE [dbo].[Customer_LUCountry](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_LUStateID]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer_LUStateID]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -167,7 +167,7 @@ CREATE TABLE [dbo].[Customer_LUStateID](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_ZipCode]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Customer_ZipCode]    Script Date: 4/19/2025 11:18:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -181,7 +181,7 @@ CREATE TABLE [dbo].[Customer_ZipCode](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Inventory]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Inventory]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -200,7 +200,7 @@ CREATE TABLE [dbo].[Inventory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LU_Price]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[LU_Price]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -210,7 +210,7 @@ CREATE TABLE [dbo].[LU_Price](
 	[unit_price] [int] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LU_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[LU_Status]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -224,7 +224,7 @@ CREATE TABLE [dbo].[LU_Status](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LUPartName]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[LUPartName]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -238,7 +238,7 @@ CREATE TABLE [dbo].[LUPartName](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[P_Users]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[P_Users]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -258,7 +258,7 @@ CREATE TABLE [dbo].[P_Users](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Product_LU_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Product_LU_Status]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -272,7 +272,7 @@ CREATE TABLE [dbo].[Product_LU_Status](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Product_Status]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Product_Status]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -286,7 +286,7 @@ CREATE TABLE [dbo].[Product_Status](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Purchasing]    Script Date: 3/30/2025 9:22:35 PM ******/
+/****** Object:  Table [dbo].[Purchasing]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -307,7 +307,7 @@ CREATE TABLE [dbo].[Purchasing](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Workorder]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  Table [dbo].[Workorder]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -326,7 +326,7 @@ CREATE TABLE [dbo].[Workorder](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [User].[User_Log]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  Table [User].[User_Log]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -398,7 +398,7 @@ REFERENCES [dbo].[Purchasing] ([purchase_id])
 GO
 ALTER TABLE [dbo].[Workorder] CHECK CONSTRAINT [FK_Workorder_Purchasing]
 GO
-/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -454,7 +454,7 @@ BEGIN
     END
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertCustomer]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertCustomer]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -466,7 +466,8 @@ CREATE PROCEDURE [dbo].[InsertCustomer]
 	@city nvarchar(50),
 	@state nvarchar(50),
 	@country nvarchar(50),
-	@zip_code nvarchar(50)
+	@zip_code nvarchar(50),
+	@ReturnValue INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -530,15 +531,18 @@ BEGIN
 		VALUES (@customer_name, @phone_number, @address_id);
 
 		COMMIT TRANSACTION;
+
+		SET @ReturnValue = 1;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRANSACTION;
 
+		SET @ReturnValue = -1;
 		THROW;
 	END CATCH
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertInventory]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertInventory]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -617,7 +621,7 @@ BEGIN
 
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertLocationInventory]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertLocationInventory]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -625,7 +629,8 @@ GO
 CREATE PROCEDURE [dbo].[InsertLocationInventory]
 @itemID int,
 @location nvarchar(50),
-@userID int
+@userID int,
+@statusID int
 
 AS
 BEGIN
@@ -667,15 +672,15 @@ BEGIN
 
 	--Update status_id in purchase table
 	UPDATE dbo.Purchasing
-	SET status_id = 5
+	SET status_id = @statusID
 	WHERE purchase_id = @purchaseID	
 
 	UPDATE dbo.Workorder
-	SET status_id = 5
+	SET status_id = @statusID
 	WHERE workorder_id = @workorderID
 
 	UPDATE dbo.Inventory
-	SET Inventory.location = @location, Inventory.status_id = 5, Inventory.i_user_id = @userID
+	SET Inventory.location = @location, Inventory.status_id = @statusID, Inventory.i_user_id = @userID
 	WHERE item_id = @itemID
 
 COMMIT TRANSACTION
@@ -689,7 +694,7 @@ COMMIT TRANSACTION
 	END CATCH;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertPurchase]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertPurchase]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -775,7 +780,7 @@ BEGIN
 	END CATCH;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertTech]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertTech]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -837,7 +842,7 @@ BEGIN
 	END CATCH;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertUser]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertUser]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -848,7 +853,8 @@ CREATE PROCEDURE [dbo].[InsertUser]
     @Password NVARCHAR(100),  -- Accept plain-text password
     @FirstName NVARCHAR(50) = NULL,
     @LastName NVARCHAR(50) = NULL,
-    @Role NVARCHAR(50)
+    @Role NVARCHAR(50),
+	@ReturnValue INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -896,17 +902,19 @@ BEGIN
            @Username, @Email, @PasswordHash, @FirstName, @LastName, @Role, @PasswordSalt;
 
 		COMMIT TRANSACTION;
+		SET @ReturnValue = 1;
 	END TRY
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			ROLLBACK TRANSACTION;
+			SET @ReturnValue = -1;
 		--Grabs the error
 		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
 		RAISERROR(@ErrorMessage, 16, 1);
 	END CATCH;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[InsertWorkorder]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertWorkorder]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -951,7 +959,7 @@ BEGIN
 	END CATCH;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateStatus]    Script Date: 3/30/2025 9:22:36 PM ******/
+/****** Object:  StoredProcedure [dbo].[UpdateStatus]    Script Date: 4/19/2025 11:18:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
