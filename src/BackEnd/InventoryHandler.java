@@ -2,15 +2,12 @@ package BackEnd;
 
 
 //Imports
-import FrontEnd.InventoryScreen;
-import BackEnd.InventoryTable;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -44,7 +41,7 @@ public class InventoryHandler {
         
     }
     
-        //Reusable fucntion. Receives combo box and status id number
+    //Reusable fucntion. Receives combo box and status id number
     //Returns the order ids that match the status id
     public ObservableList<String> populateorderID(ComboBox<String> comboBox,
             int StatusId){

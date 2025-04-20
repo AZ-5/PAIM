@@ -1,11 +1,16 @@
 package FrontEnd;
 
 //Imports
+import BackEnd.Warnings;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.function.Supplier;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 
 public class ScreenManager {
     private final Stage stage;
@@ -25,37 +30,38 @@ public class ScreenManager {
         Supplier<Pane> screenFactory = screenMap.get(name);
         if (screenFactory != null) {
             Pane screen = screenFactory.get(); // create a fresh instance
-            stage.setScene(new Scene(screen, 800, 600));
+            
+            // Create the menu bar
+            MenuBar menuBar = createMenuBar();           
+            BorderPane layout = new BorderPane();
+            layout.setTop(menuBar);
+            layout.setCenter(screen);     
+            
+            stage.setScene(new Scene(layout, 800, 600));
             stage.show();
         } else {
             System.err.println("Screen not found: " + name);
         }
     }
     
+    private MenuBar createMenuBar() {
+
+        Menu fileMenu = new Menu("File");
+        MenuItem exitItem = new MenuItem("Exit");
+        exitItem.setOnAction(e -> stage.close());
+        MenuItem logoutItem = new MenuItem("Logout");
+        logoutItem.setOnAction(e -> showScreen("login"));
+        fileMenu.getItems().addAll(logoutItem, exitItem);
+
+        Menu helpMenu = new Menu("Help");
+        MenuItem aboutItem = new MenuItem("About");
+        aboutItem.setOnAction(e -> Warnings.showAlert("PAIM will handle all "
+                + "information related to purchases.."));
+        helpMenu.getItems().add(aboutItem);
+
+        MenuBar menuBar = new MenuBar(fileMenu, helpMenu);
+        return menuBar;
+}
     
-    /*
-    private final Stage stage;
-    private final HashMap<String, Pane> screenMap = new HashMap<>();
-
-    public ScreenManager(Stage stage) {
-        this.stage = stage;
-    }
-
-    // Add a screen
-    public void addScreen(String name, Pane screen) {
-        screenMap.put(name, screen);
-    }
-
-    // Switch to a screen
-    public void showScreen(String name) {
-        Pane screen = screenMap.get(name);
-        if (screen != null) {
-            stage.setScene(new Scene(screen, 800, 600));
-            stage.show();
-        } else {
-            System.err.println("Screen not found: " + name);
-        }
-    }
-    */
 }
 

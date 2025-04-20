@@ -182,7 +182,11 @@ public class Warnings {
         public static void emptyQuantity() {
             showAlert("Quantity is empty", "Please enter a quantity.");
         }
-
+        
+        public static void emptyItemID() {
+            showAlert("ItemID is empty", "Please enter an Item ID.");
+        }
+        
         public static void invalidQuantity() {
             showAlert("Invalid quantity", "Please enter a valid positive "
                     + "number.");
@@ -223,4 +227,69 @@ public class Warnings {
             alert.setContentText(content);
             alert.showAndWait();
         }
+        
+        public static void showAlert(String message) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        }
+        public static void showAddCustomer() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Customer successfully added");
+            alert.showAndWait();
+        }
+        public static void showCompleteStorage() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Item shipped successful.");
+            alert.showAndWait();
+        }
+        public static void showAssignedItem() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Item assigned succesful.");
+            alert.showAndWait();
+        }
+        public static void showAssignedWO() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Work order assigned succesful.");
+            alert.showAndWait();
+        }
+        public static void showBeginWO() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Work order begin succesful.");
+            alert.showAndWait();
+        }
+        public static void showCompleteWO() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Work order completed succesful.");
+            alert.showAndWait();
+        }
+        public static void showCompletePurchase() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Purchase recieved succesfully.");
+            alert.showAndWait();
+        }
+        public static void showCompleteUser() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("User account succesfully created.");
+            alert.showAndWait();
+        }
+       
 } //End Subclass Warnings

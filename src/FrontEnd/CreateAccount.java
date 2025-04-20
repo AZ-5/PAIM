@@ -2,12 +2,12 @@ package FrontEnd;
 //Imports
 import BackEnd.DatabaseConnection;
 import BackEnd.Validation;
-import static BackEnd.Validation.isValidEmail;
 import BackEnd.Warnings;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Supplier;
+import static javafx.application.Application.STYLESHEET_CASPIAN;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -21,6 +21,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 
 //NOTES TO SELF. Need to validate all entries.
@@ -36,10 +41,23 @@ public class CreateAccount extends ScreenController{
     }
     private BorderPane borderPane;
     private HBox hBox1;
+    private VBox titleVBox;
+    private VBox createVBox;
     
     private BorderPane buildCreateView(){
     //public CreateAccount(){
         borderPane = new BorderPane();
+        titleVBox = new VBox();
+        createVBox = new VBox();
+        
+        //Title VBox ------------------------------------------------------------------
+       //Screen
+       Text woTitle = new Text("Create your account");
+       woTitle.setFont(Font.font(STYLESHEET_CASPIAN, FontWeight.BOLD,
+                FontPosture.REGULAR, 25));
+       //Title VBOX
+       titleVBox.setAlignment(Pos.CENTER);
+       titleVBox.getChildren().addAll(woTitle);
         
         // Create labels and TextFields for use in AddUser Tab1
         //userid, username, firstname, lastname, role, email, password
@@ -96,17 +114,26 @@ public class CreateAccount extends ScreenController{
         gridPane.add(lblRole, 0, 4);
         gridPane.add(rolePicker, 0, 5);
         
+        
         //Buttons 
         Button createAccountButton = new Button("Create Account");
         Button clearButton = new Button("Clear");
         
         hBox1 = new HBox();
         hBox1.setSpacing(10);
-        hBox1.setAlignment(Pos.CENTER);
+        hBox1.setAlignment(Pos.CENTER_RIGHT);
         hBox1.getChildren().addAll(createAccountButton, clearButton);
         
-        borderPane.setCenter(gridPane);
-        borderPane.setBottom(hBox1);
+        gridPane.add(hBox1, 2, 7);
+        
+        createVBox.setPadding(new Insets(10, 0, 0, 0));
+        
+        createVBox.getChildren().add(gridPane);
+        //borderPane.setCenter(gridPane);
+        borderPane.setCenter(createVBox);
+        borderPane.setTop(titleVBox);
+        
+        //borderPane.setBottom(hBox1);
         
         
         // NEED TO ADD ERROR HANDLING FOR CREATE ACCOUNT
@@ -164,25 +191,41 @@ public class CreateAccount extends ScreenController{
             try(Connection conn = DatabaseConnection.getConnection())
                 {
                     CallableStatement stmt = conn.prepareCall("{call InsertUser("
-                            + "?, ?, ?, ?, ?, ?)}");
+                            + "?, ?, ?, ?, ?, ?, ?)}");
                     stmt.setString(1, userName);  // Set input username
                     stmt.setString(2, email);  // Set input password
                     stmt.setString(3, password);
                     stmt.setString(4, firstName);
                     stmt.setString(5, lastName);
                     stmt.setString(6, role);
-
+                    stmt.registerOutParameter(7, java.sql.Types.INTEGER);
                     // Execute the stored procedure
                     stmt.execute();
+                    int result = stmt.getInt(7);
 
-
+                    if(result == 1){
+                        userNameText.clear();
+                        passwordText.clear();
+                        rolePicker.getSelectionModel().clearSelection();
+                        firstNameText.clear();
+                        lastNameText.clear();
+                        emailText.clear();
+                        Warnings.showCompleteUser();
+                        switchTo("login");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            
         });
         
         clearButton.setOnAction(event -> {
-            
+            userNameText.clear();
+            firstNameText.clear();
+            passwordText.clear();
+            lastNameText.clear();
+            emailText.clear();
+            rolePicker.getSelectionModel().clearSelection();
         });
         return borderPane;
     }

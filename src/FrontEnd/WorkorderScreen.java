@@ -3,7 +3,6 @@ package FrontEnd;
 
 //Imports
 import BackEnd.DatabaseConnection;
-import BackEnd.Purchase;
 import BackEnd.WorkorderTable;
 import BackEnd.InventoryHandler;
 import BackEnd.Warnings;
@@ -16,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -28,11 +26,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import javafx.scene.control.TableColumn;
 import java.time.LocalDate;
 import java.util.function.Supplier;
-import javafx.beans.property.IntegerProperty;
+import static javafx.application.Application.STYLESHEET_CASPIAN;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -40,6 +37,10 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 //Begin Subclass WorkorderScreen
 public class WorkorderScreen extends ScreenController{
@@ -56,6 +57,7 @@ public class WorkorderScreen extends ScreenController{
     private VBox vBox;
     private VBox vBox2;
     private VBox vBoxTab3;
+    private VBox titleVBox;
     private HBox hBox1;
     private HBox hBox2;
     private HBox hBox3;
@@ -80,6 +82,7 @@ public class WorkorderScreen extends ScreenController{
         vBox = new VBox();
         vBox2 = new VBox();
         vBoxTab3 = new VBox();
+        titleVBox = new VBox();
         hBox1 = new HBox();
         hBox2 = new HBox();
         hBox3 = new HBox();
@@ -90,8 +93,14 @@ public class WorkorderScreen extends ScreenController{
         myWoComboBox = new ComboBox<>();
         myAssignedWoCombo = new ComboBox<>();
         myCompleteWoCombo = new ComboBox<>();
-        
-       
+//Title VBox ------------------------------------------------------------------
+       //Screen
+       Text woTitle = new Text("Work Order Management");
+       woTitle.setFont(Font.font(STYLESHEET_CASPIAN, FontWeight.BOLD,
+                FontPosture.REGULAR, 25));
+       //Title VBOX
+       titleVBox.setAlignment(Pos.CENTER);
+       titleVBox.getChildren().addAll(woTitle);
 //Begin Tab 1-------------------------------------------------------------------
         //Buttons
         Button showUnAssigned = new Button("Show Unassigned Workorders");
@@ -106,11 +115,13 @@ public class WorkorderScreen extends ScreenController{
         //myCompleteWoCombo.setItems());
         Button assignWorkorder = new Button("Assign Work Order");
         Label title = new Label("Select employee and Order:");
+        title.setStyle("-fx-font-weight: bold;");
         Label txtMyWoBox = new Label("Workorder ID");
         Label txtComboEmployee = new Label("Employee");
         
         
         //HBox for use in Tab1 tableview
+        hBox1.setPadding(new Insets(5, 5, 5, 5));
         hBox1.getChildren().addAll(showUnAssigned);
         
         //set columns in tableview
@@ -137,8 +148,9 @@ public class WorkorderScreen extends ScreenController{
         
         //Set VBox that will handle assigning workorders
         vBox.setMargin(vBox, new Insets(15, 15, 15, 15));
+        vBox.setPadding(new Insets(10, 10, 10, 10));
         vBox.setAlignment(Pos.CENTER);
-        vBox.setBorder(new Border(new BorderStroke(Color.RED,
+        vBox.setBorder(new Border(new BorderStroke(Color.DARKGREY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 BorderWidths.DEFAULT)));
         vBox.setSpacing(10);
@@ -152,7 +164,7 @@ public class WorkorderScreen extends ScreenController{
         //set BorderPane2 for use in Tab1 Unassigned Workorders
         borderPane2.setCenter(tableView);
         borderPane2.setBottom(hBox1);
-        borderPane2.setLeft(vBox);
+        borderPane2.setRight(vBox);
         //End Tab 1
 //End Tab 1--------------------------------------------------------------------        
 //Begin Tab 2------------------------------------------------------------------
@@ -191,6 +203,7 @@ public class WorkorderScreen extends ScreenController{
         Button showAssigned = new Button("Show Assigned");
         
         //HBox for use in tab2
+        hBox2.setPadding(new Insets(5, 5, 5, 5));
         hBox2.getChildren().addAll(showAssigned);
         
         //Items to populate vBox for assign 
@@ -198,12 +211,14 @@ public class WorkorderScreen extends ScreenController{
         
         Button beginWorkButton = new Button("Begin Work");
         Label titleWork = new Label("Select workorder to work: ");
+        titleWork.setStyle("-fx-font-weight: bold;");
         Label txtWorkMyWoBox = new Label("Workorder ID");
         
         //Set VBox that will handle assigning workorders
         vBox2.setMargin(vBox, new Insets(15, 15, 15, 15));
+        vBox2.setPadding(new Insets(10, 10, 10, 10));
         vBox2.setAlignment(Pos.CENTER);
-        vBox2.setBorder(new Border(new BorderStroke(Color.RED,
+        vBox2.setBorder(new Border(new BorderStroke(Color.DARKGREY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 BorderWidths.DEFAULT)));
         vBox2.setSpacing(10);
@@ -213,7 +228,7 @@ public class WorkorderScreen extends ScreenController{
         //Set borderPane3 for tab 2
         borderPane3.setCenter(tableViewAssigned);
         borderPane3.setBottom(hBox2);
-        borderPane3.setLeft(vBox2);
+        borderPane3.setRight(vBox2);
 //end Tab2--------------------------------------------------------------------
 
 //Begin Tab3--------------------------------------------------------------------
@@ -255,21 +270,24 @@ public class WorkorderScreen extends ScreenController{
         //Borderpane3 buttons
         Button showInProgress = new Button("Show in progress");
         
-        //HBox for use in tab2
+        //HBox for use in tab3
+        hBox3.setPadding(new Insets(5, 5, 5, 5));
         hBox3.getChildren().addAll(showInProgress);
         
         //Items to populate vBox for assign 
         //Call populateCombo box to view technicans
         Button completeWorkorderButton = new Button("Complete Workorder");
         Label titleComplete = new Label("Select Order to complete: ");
+        titleComplete.setStyle("-fx-font-weight: bold;");
         Label txtCompleteMyWoBox = new Label("Workorder ID");
         Label textDate = new Label("Date");
         DatePicker completeDate = new DatePicker();
         
         //Set VBox that will handle assigning workorders
         vBoxTab3.setMargin(vBox, new Insets(15, 15, 15, 15));
+        vBoxTab3.setPadding(new Insets(10, 10, 10, 10));
         vBoxTab3.setAlignment(Pos.CENTER);
-        vBoxTab3.setBorder(new Border(new BorderStroke(Color.RED,
+        vBoxTab3.setBorder(new Border(new BorderStroke(Color.DARKGREY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 BorderWidths.DEFAULT)));
         vBoxTab3.setSpacing(10);
@@ -280,7 +298,7 @@ public class WorkorderScreen extends ScreenController{
         //Set borderPane3 for tab 2
         borderPane4.setCenter(tableViewComplete);
         borderPane4.setBottom(hBox3);
-        borderPane4.setLeft(vBoxTab3);        
+        borderPane4.setRight(vBoxTab3);        
         
 //End Tab3---------------------------------------------------------------------        
         //Set TabView
@@ -310,6 +328,7 @@ public class WorkorderScreen extends ScreenController{
             
         //Set main borderPane
         borderPane.setCenter(tabPane);
+        borderPane.setTop(titleVBox);
 
 
 //Button handlers--------------------------------------------------------------     
@@ -412,14 +431,14 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             
             // Check if user is selected
             if (myComboBox.getValue() == null) {
-                Warnings.emptyUser(); // You'll need to define this method
+                Warnings.emptyUser(); 
                 return;
             }
             String user = myComboBox.getValue().toString();
 
             // Check if work order ID is selected
             if (myWoComboBox.getValue() == null) {
-                Warnings.emptyWorkOrder(); // You'll need to define this method
+                Warnings.emptyWorkOrder(); 
                 return;
             }
 
@@ -427,11 +446,11 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             try {
                 orderID = Integer.parseInt(myWoComboBox.getValue());
                 if (orderID <= 0) {
-                    Warnings.invalidWorkOrder(); // Optional: non-positive ID
+                    Warnings.invalidWorkOrder(); 
                     return;
                 }
             } catch (NumberFormatException e) {
-                Warnings.invalidWorkOrder(); // Non-numeric value
+                Warnings.invalidWorkOrder(); 
                 return;
             }
 
@@ -442,23 +461,44 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             //Update assigned workorder combobox, so the combobox always 
             //stays up to date
             myAssignedWoCombo.setItems(populateorderID(myAssignedWoCombo, 2));
+            myWoComboBox.getSelectionModel().clearSelection();
+            myComboBox.getSelectionModel().clearSelection();
+            showUnassigned();
+            Warnings.showAssignedWO();
         });
         
         //Pass orderID and statusID to set OrderID as in progress
         beginWorkButton.setOnAction(event -> {
+            if (myAssignedWoCombo.getValue() == null){
+                Warnings.invalidWorkOrder(); 
+                return;
+            }
             int orderID = Integer.parseInt(myAssignedWoCombo.getValue());
             int statusID = 3;
             updateWorkorder(orderID, statusID);
             myCompleteWoCombo.setItems(populateorderID(myWoComboBox, 3));
+            myAssignedWoCombo.getSelectionModel().clearSelection();
+            showAssigned();
+            Warnings.showBeginWO();
         });
         
+        //Complete the workorder
+        //By changing status id
         completeWorkorderButton.setOnAction(event -> {
             InventoryHandler inventoryHandler = new InventoryHandler();
+            if(myCompleteWoCombo.getValue() == null){
+                Warnings.invalidWorkOrder(); 
+                return;
+            }
             int orderID = Integer.parseInt(myCompleteWoCombo.getValue());
             int statusID = 4;
             LocalDate date = completeDate.getValue();
             updateWorkorder(orderID, statusID);
             inventoryHandler.createInventory(orderID);
+            showInProgress();
+            myCompleteWoCombo.getSelectionModel().clearSelection();
+            completeDate.setValue(null);
+            Warnings.showCompleteWO();
         });
         return borderPane;
     }
@@ -470,7 +510,6 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
             int StatusId){
         
         int statusId = StatusId;
-        
         
         ObservableList<String> items = FXCollections.observableArrayList();
         String query = "SELECT w.workorder_id " 
@@ -545,9 +584,11 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
         }catch (SQLException e) {
                     e.printStackTrace();
                 }
+        
+        showAssigned();
                 
     };
-   
+   //Accept orderID and StatusID to update the order id
     public void updateWorkorder(int OrderID, int StatusID){
         int statusID = StatusID;
         int orderID = OrderID;
@@ -573,6 +614,7 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
                 
     };
     
+    //Receive user name. return userID
     public int userID(String selectedUser){
         String[] nameHalf = selectedUser.split(" ");
         if (nameHalf.length >= 2) { // Ensure there are at least two parts
@@ -634,9 +676,93 @@ ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
        
     }
     
-    /*
-    public BorderPane getView(){
-           return borderPane;
-       } 
-    */
+    public void showUnassigned(){
+        tableView.refresh();
+            ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
+            String sql = "SELECT w.workorder_id, w.quantity, lp.part_name " 
+                    + "FROM dbo.Workorder AS w " 
+                    + "JOIN dbo.LUPartName AS lp on w.part_number = lp.part_number " 
+                    + "WHERE w.status_id = 1 ";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int orderId = rs.getInt("workorder_id");
+                    //String assignedTo = rs.getString("assigned_to");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    
+                    WorkorderTable workorderTable = new WorkorderTable
+                    (orderId, partName, quantity);
+                    woTable.add(workorderTable);
+                    tableView.setItems(woTable);
+                }
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } 
+    }
+    
+    public void showAssigned(){
+        ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
+            String sql = "SELECT w.workorder_id, w.quantity, lp.part_name,"
+                    + " CONCAT(pu.first_name, ' ', pu.last_name) AS full_name " 
+                    + "FROM dbo.Workorder AS w " 
+                    + "JOIN dbo.LUPartName AS lp on w.part_number = lp.part_number "
+                    + "JOIN dbo.P_Users AS pu on w.user_id = pu.user_id " 
+                    + "WHERE w.status_id = 2 ";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int orderId = rs.getInt("workorder_id");
+                    String assignedTo = rs.getString("full_name");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    //LocalDate purchaseDate = rs.getDate("complete_date").toLocalDate();
+                    
+                    WorkorderTable workorderTable = new WorkorderTable
+                    (orderId, partName, quantity, assignedTo);
+                    woTable.add(workorderTable);
+                    tableViewAssigned.setItems(woTable);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } 
+    }
+    
+    public void showInProgress(){
+        ObservableList<WorkorderTable> woTable = FXCollections.observableArrayList();
+            String sql = "SELECT w.workorder_id, w.quantity, lp.part_name,"
+                    + " CONCAT(pu.first_name, ' ', pu.last_name) AS full_name " 
+                    + "FROM dbo.Workorder AS w " 
+                    + "JOIN dbo.LUPartName AS lp on w.part_number = lp.part_number "
+                    + "JOIN dbo.P_Users AS pu on w.user_id = pu.user_id " 
+                    + "WHERE w.status_id = 3 ";
+            
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int orderId = rs.getInt("workorder_id");
+                    String assignedTo = rs.getString("full_name");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    //LocalDate purchaseDate = rs.getDate("complete_date").toLocalDate();
+                    
+                    WorkorderTable workorderTable = new WorkorderTable
+                    (orderId, partName, quantity, assignedTo);
+                    woTable.add(workorderTable);
+                    tableViewComplete.setItems(woTable);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }             
+    }
+
 }//End Subclass WorkorderScreen

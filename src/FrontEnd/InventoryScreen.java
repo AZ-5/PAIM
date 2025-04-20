@@ -4,8 +4,6 @@ package FrontEnd;
 //Imports
 import BackEnd.DatabaseConnection;
 import BackEnd.Warnings;
-import BackEnd.Purchase;
-import BackEnd.WorkorderTable;
 import BackEnd.InventoryHandler;
 import BackEnd.InventoryTable;
 import javafx.scene.paint.Color;
@@ -28,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.function.Supplier;
+import static javafx.application.Application.STYLESHEET_CASPIAN;
 import javafx.scene.control.TableColumn;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Border;
@@ -36,6 +35,10 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 //Begin Subclass InventoryScreen
 public class InventoryScreen extends ScreenController {
@@ -62,6 +65,7 @@ public class InventoryScreen extends ScreenController {
     private ComboBox<String> myComboStored;
     private ComboBox<String> myAssignedWoCombo;
     private ComboBox<String> myComboEmployee;
+    private VBox titleVBox;
     
     private BorderPane buildInventoryFactory(){
     //public InventoryScreen(){
@@ -79,7 +83,15 @@ public class InventoryScreen extends ScreenController {
         myComboAwaitingID = new ComboBox<>();
         myComboEmployee = new ComboBox<>();
         myComboStored = new ComboBox<>();
-        
+        titleVBox = new VBox();
+//Title VBox ------------------------------------------------------------------
+       //Screen
+       Text woTitle = new Text("Inventory Management");
+       woTitle.setFont(Font.font(STYLESHEET_CASPIAN, FontWeight.BOLD,
+                FontPosture.REGULAR, 25));
+       //Title VBOX
+       titleVBox.setAlignment(Pos.CENTER);
+       titleVBox.getChildren().addAll(woTitle);        
 //Begin Tab 1-----------------------------------------------------------------
         //set columns in tableview
         TableColumn<InventoryTable, Integer> itemIdColumnAwaiting = 
@@ -113,6 +125,7 @@ public class InventoryScreen extends ScreenController {
         
         //Assign HBOX
         hBox1.getChildren().addAll(showAwaiting);
+        hBox1.setPadding(new Insets(5, 5, 5, 5));
         
         //Vbox Buttons
         InventoryHandler comboHandler = new InventoryHandler();
@@ -122,6 +135,7 @@ public class InventoryScreen extends ScreenController {
         myComboEmployee.setItems(
                 comboHandler.populateComboBox(myComboEmployee));
         Label lblTitle = new Label("Store item: ");
+        lblTitle.setStyle("-fx-font-weight: bold;");
         Label lblItemID = new Label("Item ID ");
         Label lblAisle = new Label("Aisle Number: ");
         TextField txtAisle = new TextField();
@@ -133,8 +147,9 @@ public class InventoryScreen extends ScreenController {
         
         //Set VBox that will handle assigning workorders
         vBox.setMargin(vBox, new Insets(15, 15, 15, 15));
+        vBox.setPadding(new Insets(10, 10, 10, 10));
         vBox.setAlignment(Pos.CENTER);
-        vBox.setBorder(new Border(new BorderStroke(Color.RED,
+        vBox.setBorder(new Border(new BorderStroke(Color.DARKGREY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 BorderWidths.DEFAULT)));
         vBox.setSpacing(10);
@@ -145,7 +160,7 @@ public class InventoryScreen extends ScreenController {
         //Set BordPane for Tab1
         borderPane2.setCenter(tableAwaitingStorage);
         borderPane2.setBottom(hBox1);
-        borderPane2.setLeft(vBox);
+        borderPane2.setRight(vBox);
 
 //End Tab 1-------------------------------------------------------------------
 //Begin Tab 2------------------------------------------------------------------
@@ -167,9 +182,9 @@ public class InventoryScreen extends ScreenController {
         itemIdColumnStored.setPrefWidth(100);
         partNameColumnStored.setPrefWidth(150);
         quantityColumnStored.setPrefWidth(100);
-        aisleColumnStored.setPrefWidth(150);
-        bayColumnStored.setPrefWidth(150);
-        shelfColumnStored.setPrefWidth(150);
+        aisleColumnStored.setPrefWidth(100);
+        bayColumnStored.setPrefWidth(100);
+        shelfColumnStored.setPrefWidth(100);
         
         // Bind Columns to the Purchase Model Class
         itemIdColumnStored.setCellValueFactory(p -> 
@@ -194,9 +209,10 @@ public class InventoryScreen extends ScreenController {
         
         //Hbox
         hBox2.getChildren().addAll(showStoredButton);
-        
+        hBox2.setPadding(new Insets(5, 5, 5, 5));
         //VBox
         Label lblCompleteTitle = new Label("Move items for shipping: ");
+        lblCompleteTitle.setStyle("-fx-font-weight: bold;");
         Label lblItemIDComplete = new Label("Item ID: ");
         myComboStored.setItems(
                 comboHandler.populateorderID(myComboAwaitingID, 5));
@@ -204,8 +220,9 @@ public class InventoryScreen extends ScreenController {
         
         //Set VBox that will handle assigning workorders
         vBoxTab2.setMargin(vBox, new Insets(15, 15, 15, 15));
+        vBoxTab2.setPadding(new Insets(10, 10, 10, 10));
         vBoxTab2.setAlignment(Pos.CENTER);
-        vBoxTab2.setBorder(new Border(new BorderStroke(Color.RED,
+        vBoxTab2.setBorder(new Border(new BorderStroke(Color.DARKGREY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 BorderWidths.DEFAULT)));
         vBoxTab2.setSpacing(10);
@@ -215,7 +232,7 @@ public class InventoryScreen extends ScreenController {
         //Borderpane
         borderPane3.setCenter(tableStored);
         borderPane3.setBottom(hBox2);
-        borderPane3.setLeft(vBoxTab2);
+        borderPane3.setRight(vBoxTab2);
 
 //END Tab 2---------------------------------------------------------------------
 //Begin Tabs -------------------------------------------------------------------      
@@ -246,6 +263,7 @@ public class InventoryScreen extends ScreenController {
 //End Tabs----------------------------------------------------------------------            
         //Set main borderPane
         borderPane.setCenter(tabPane);
+        borderPane.setTop(titleVBox);
     
         showAwaiting.setOnAction(event -> {
             ObservableList<InventoryTable> inventoryList = FXCollections.observableArrayList();
@@ -278,6 +296,15 @@ public class InventoryScreen extends ScreenController {
         
         assignItem.setOnAction(event ->{
             InventoryHandler employeeHandler = new InventoryHandler();
+            //error handling
+            if(myComboEmployee.getValue() == null){
+                Warnings.emptyUser();
+                return;
+            }
+            if(myComboAwaitingID.getValue() == null){
+                Warnings.emptyItemID();
+                return;
+            }
             String userName = myComboEmployee.getValue().toString();
             int itemID = Integer.parseInt(myComboAwaitingID.getValue());
             int userID = employeeHandler.userID(userName);
@@ -310,47 +337,22 @@ public class InventoryScreen extends ScreenController {
             employeeHandler.assignLocation(itemID, userID, location, status);
             myComboStored.setItems(
                 comboHandler.populateorderID(myComboAwaitingID, 5));
+            myComboAwaitingID.getSelectionModel().clearSelection();
+            myComboEmployee.getSelectionModel().clearSelection();
+            txtAisle.clear();
+            txtBay.clear();
+            txtShelfLevel.clear();
+            showAwaiting();
+            Warnings.showAssignedItem();
         });
         showStoredButton.setOnAction(event -> showStored());
-        /*
-        {
-            ObservableList<InventoryTable> inventoryList = FXCollections.observableArrayList();
-            String sql = "SELECT i.item_id, i.quantity, lp.part_name, "
-                    + "SUBSTRING(i.location, 1, 2) AS aisle, "
-                    + "SUBSTRING(i.location, 3, 2) AS bay, "
-                    + "SUBSTRING(i.location, 5, 2) AS shelf_level "
-                    + "FROM dbo.Inventory as i " 
-                    + "JOIN dbo.LUPartName AS lp on i.part_number = lp.part_number "
-                    + "WHERE i.status_id = 5 ";
 
-            try (Connection conn = DatabaseConnection.getConnection();
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql)) {
-
-                while (rs.next()) {
-                    int itemID = rs.getInt("item_id");
-                    String partName = rs.getString("part_name");
-                    int quantity = rs.getInt("quantity");
-                    String aisle = rs.getString("aisle");
-                    String bay = rs.getString("bay");
-                    String shelf = rs.getString("shelf_level");
-                    
-                    InventoryTable item = new InventoryTable(itemID,
-                    partName, quantity, aisle, bay, shelf);
-                    
-                    inventoryList.add(item);
-
-                    
-                }
-                tableStored.setItems(inventoryList);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } 
-
-        });
-       */ 
         //Pass itemID and then update the value as shipped
         completeStorage.setOnAction(event -> {
+            if(myComboStored.getValue() == null){
+                Warnings.emptyItemID();
+                return;
+            }
             int itemID = Integer.parseInt(myComboStored.getValue());
             int status = 6;
             String location = "Shipped";
@@ -376,6 +378,8 @@ public class InventoryScreen extends ScreenController {
                 e.printStackTrace();
             } 
             showStored();
+            myComboStored.getSelectionModel().clearSelection();
+            Warnings.showCompleteStorage();
         });
         return borderPane;
     }
@@ -415,10 +419,35 @@ public class InventoryScreen extends ScreenController {
                 e.printStackTrace();
             } 
     }
-    /*
-    public BorderPane getView(){
-        return borderPane;
-       }  
-    */
+    
+    public void showAwaiting(){
+        ObservableList<InventoryTable> inventoryList = FXCollections.observableArrayList();
+            String sql = "SELECT i.item_id, i.quantity, lp.part_name "
+                    + "FROM dbo.Inventory as i " 
+                    + "JOIN dbo.LUPartName AS lp on i.part_number = lp.part_number "
+                    + "WHERE i.status_id = 4 ";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    int itemID = rs.getInt("item_id");
+                    String partName = rs.getString("part_name");
+                    int quantity = rs.getInt("quantity");
+                    
+                    InventoryTable item = new InventoryTable(itemID,
+                    partName, quantity);
+                    
+                    inventoryList.add(item);
+
+                    
+                }
+                tableAwaitingStorage.setItems(inventoryList);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }           
+    }
+
     
 } //End Subclass InventoryScreen

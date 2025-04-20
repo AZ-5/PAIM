@@ -12,14 +12,16 @@ import java.sql.SQLException;
 import java.sql.Types;
 import javafx.scene.layout.Region;
 import BackEnd.DatabaseConnection;
-import BackEnd.InventoryTable;
 import BackEnd.Warnings;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.function.Supplier;
+import static javafx.application.Application.STYLESHEET_CASPIAN;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 
 
@@ -50,7 +52,9 @@ public class LoginView extends ScreenController {
         vbox.setAlignment(Pos.CENTER);  
 
         // Create text field for username
-        Label txtTitle = new Label("Welcome");
+        Label txtTitle = new Label("Login");
+        txtTitle.setFont(Font.font(STYLESHEET_CASPIAN, FontWeight.BOLD,
+                FontPosture.REGULAR, 25));
         Label txtUsername = new Label("Username");
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username:");
@@ -111,7 +115,6 @@ public class LoginView extends ScreenController {
                         Warnings.loginError();
                     }
 
-                    System.out.println("Return value: " + result);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -144,7 +147,6 @@ public class LoginView extends ScreenController {
                 try(ResultSet rs = pstmt.executeQuery()){
                     if (rs.next()) {
                         role = rs.getString("role");
-                        System.out.println(role);
                     } 
                 }
                 

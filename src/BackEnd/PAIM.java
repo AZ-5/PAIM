@@ -52,8 +52,8 @@ public class PAIM extends Application {
         screenManager.addScreen("inventory", inventoryScreen.getView());
         
         //Show the login screen
-        //screenManager.showScreen("login");
-        screenManager.showScreen("debug");
+        screenManager.showScreen("login");
+        //screenManager.showScreen("debug");
 
     }
 

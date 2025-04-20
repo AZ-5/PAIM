@@ -18,14 +18,16 @@ public class Purchase {
     private StringProperty partName;
     private IntegerProperty quantity;
     private ObjectProperty<LocalDate> purchaseDate;
+    private StringProperty status;
     
     public Purchase(int orderId, String customerName, String partName, 
-       int quantity, LocalDate purchaseDate){
+       int quantity, LocalDate purchaseDate, String status){
         this.orderId = new SimpleIntegerProperty(orderId);
         this.customerName = new SimpleStringProperty(customerName);
         this.partName = new SimpleStringProperty(partName);
         this.quantity = new SimpleIntegerProperty(quantity);
         this.purchaseDate = new SimpleObjectProperty<>(purchaseDate);
+        this.status = new SimpleStringProperty(status);
     }
     
     public IntegerProperty orderIdProperty() { return orderId; }
@@ -34,5 +36,6 @@ public class Purchase {
     public IntegerProperty quantityProperty() { return quantity; }
     public ObjectProperty<LocalDate> purchaseDateProperty() { 
         return purchaseDate; }
+    public StringProperty statusProperty() { return status; }
             
 } //End Subclass Purchase
